@@ -1,0 +1,12 @@
+Package: ShinyApp
+Title: Descriptive Analysis Shiny App for Data Visualization
+Version: 0.1.0
+Authors@R: 
+    person("Sarthak", "Choudhary", email = "choudharysarthak124@gmail.com", role = c("aut", "cre"))
+Description: A Shiny application for performing descriptive analysis and data visualization using 
+    built-in datasets like `iris` and `palmerpenguins`, as well as user-uploaded Excel files. 
+    The app allows users to create histograms, boxplots, and scatter plots with customizable options.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
