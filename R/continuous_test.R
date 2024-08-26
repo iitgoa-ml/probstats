@@ -294,5 +294,22 @@ server <- function(input, output, session) {
   })
 }
 
+#' Run Continuous Sample Space Probability Calculator App
+#'
+#' This function launches the Shiny app for calculating probabilities in continuous sample spaces.
+#' Users can select between Uniform and Normal distributions, define variable ranges and intervals,
+#' and calculate both joint and individual probabilities. The app also provides visualizations
+#' of the defined ranges and intervals.
+#'
+#' @return The Shiny app is launched in the default web browser.
+#' @examples
+#' if (interactive()) {
+#'   run_continuous_app()
+#' }
+#' @export
+
+run_continuous_app <- function() {
+  shiny::shinyApp(ui = ui, server = server)
+}
 # Run the application
-shinyApp(ui = ui, server = server)
+# shinyApp(ui = ui, server = server)
