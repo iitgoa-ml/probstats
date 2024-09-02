@@ -1,6 +1,37 @@
 library(shiny)
 
-ui <- fluidPage(
+
+#' Launch the Probability Calculator with Operations Shiny App
+#'
+#' The `run_discrete_app` function initializes and launches a Shiny web application
+#' designed to calculate and visualize probabilities based on discrete outcomes and
+#' events. The app allows users to define outcomes, events, and trials, input
+#' probabilities for each outcome, and perform operations such as union,
+#' intersection, and complement on the defined events. The result of the operations,
+#' along with the event probabilities, is then displayed for the user.
+#'
+#' @details
+#' The app provides an interactive interface where users can:
+#' \itemize{
+#'   \item Define the number of outcomes, events, and trials.
+#'   \item Input the probability for each outcome.
+#'   \item Assign outcomes to each trial within an event.
+#'   \item Perform operations on the events (union, intersection, complement).
+#'   \item View the calculated probabilities for each event and the result of the selected operation.
+#' }
+#'
+#' @return
+#' A Shiny web application object that runs locally in the user's web browser.
+#'
+#' @examples
+#' if (interactive()) {
+#'   run_discrete_app()
+#' }
+#'
+#' @export
+run_discrete_app <- function() {
+
+  ui <- fluidPage(
   titlePanel("Probability Calculator with Operations"),
 
   sidebarLayout(
@@ -153,36 +184,8 @@ server <- function(input, output, session) {
   }
 }
 
-#' Launch the Probability Calculator with Operations Shiny App
-#'
-#' The `run_discrete_app` function initializes and launches a Shiny web application
-#' designed to calculate and visualize probabilities based on discrete outcomes and
-#' events. The app allows users to define outcomes, events, and trials, input
-#' probabilities for each outcome, and perform operations such as union,
-#' intersection, and complement on the defined events. The result of the operations,
-#' along with the event probabilities, is then displayed for the user.
-#'
-#' @details
-#' The app provides an interactive interface where users can:
-#' \itemize{
-#'   \item Define the number of outcomes, events, and trials.
-#'   \item Input the probability for each outcome.
-#'   \item Assign outcomes to each trial within an event.
-#'   \item Perform operations on the events (union, intersection, complement).
-#'   \item View the calculated probabilities for each event and the result of the selected operation.
-#' }
-#'
-#' @return
-#' A Shiny web application object that runs locally in the user's web browser.
-#'
-#' @examples
-#' if (interactive()) {
-#'   run_discrete_app()
-#' }
-#'
-#' @export
-run_discrete_app <- function() {
   shiny::shinyApp(ui = ui, server = server)
 }
+# run_discrete_app()
 
 # shinyApp(ui = ui, server = server)

@@ -5,7 +5,23 @@ library(ggplot2)
 library(DT)
 library(readxl)
 
+
+#' Run Descriptive Analysis Shiny App
+#'
+#' This function launches the Shiny app for descriptive analysis of datasets.
+#' The app allows users to upload Excel files, select datasets (including built-in datasets like `iris` and `palmerpenguins`),
+#' and create various plots such as histograms, boxplots, and scatter plots.
+#'
+#' @return The Shiny app is launched in the default web browser.
+#' @examples
+#' if (interactive()) {
+#'   run_descriptive_analysis_app()
+#' }
+#' @export
+run_descriptive_analysis_app <- function(){
+
 # Define the User Interface (UI) of the Shiny App
+
 ui <- shiny::fluidPage(
   shiny::titlePanel("Dataset Viewer"),
   shiny::sidebarLayout(
@@ -139,18 +155,5 @@ server <- function(input, output, session) {
   })
 }
 
-#' Run Descriptive Analysis Shiny App
-#'
-#' This function launches the Shiny app for descriptive analysis of datasets.
-#' The app allows users to upload Excel files, select datasets (including built-in datasets like `iris` and `palmerpenguins`),
-#' and create various plots such as histograms, boxplots, and scatter plots.
-#'
-#' @return The Shiny app is launched in the default web browser.
-#' @examples
-#' if (interactive()) {
-#'   run_descriptive_analysis_app()
-#' }
-#' @export
-run_descriptive_analysis_app <- function() {
   shiny::shinyApp(ui = ui, server = server)
 }
