@@ -7,7 +7,7 @@ library(gridExtra)
 #' Run Continuous Sample Space Probability Calculator App
 #'
 #' This function launches the Shiny app for calculating probabilities in continuous sample spaces.
-#' Users can select between Uniform and Normal distributions, define variable ranges and intervals,
+#' Users can select between Uniform, Normal, Exponential and Binomial distributions, define variable ranges and intervals,
 #' and calculate both joint and individual probabilities. The app also provides visualizations
 #' of the defined ranges and intervals.
 #'
