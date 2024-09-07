@@ -3,9 +3,7 @@ Title: Descriptive Analysis Shiny App for Data Visualization
 Version: 0.1.0
 Authors@R: 
     person("Sarthak", "Choudhary", email = "choudharysarthak124@gmail.com", role = c("aut", "cre"))
-Description: A Shiny application for performing descriptive analysis and data visualization using 
-    built-in datasets like `iris` and `palmerpenguins`, as well as user-uploaded Excel files. 
-    The app allows users to create histograms, boxplots, and scatter plots with customizable options.
+Description: A Shiny application for visualizing probability concepts, including probability trees, Bayes' theorem, and test result probabilities, using built-in and user-uploaded data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -17,4 +15,5 @@ Imports:
     gridExtra,
     palmerpenguins,
     readxl,
-    shiny
+    shiny,
+    plotly

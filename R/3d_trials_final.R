@@ -1,6 +1,29 @@
 library(shiny)
 library(plotly)
 
+#' Run the Three Events Visualization Shiny App
+#'
+#' This function launches a Shiny app that visualizes the outcomes of three events (Coin Toss or Dice Roll).
+#' Users can select event types and outcomes, and visualize probabilities and selected outcomes in a 3D plot.
+#'
+#' Features:
+#' - Select between "Coin Toss" or "Dice Roll" for three different events.
+#' - Choose specific outcomes for each event.
+#' - Visualize the probability of selected outcomes and display a 3D scatter plot of possible results.
+#'
+#' @return A Shiny app instance that runs locally in your browser.
+#'
+#' @import shiny
+#' @import plotly
+#' @examples
+#' if (interactive()) {
+#'   runThreeEventsApp()
+#' }
+#'
+#' @export
+runThreeEventsApp <- function() {
+
+
 # Define the UI
 ui <- fluidPage(
   titlePanel("Three Events Visualization"),
@@ -160,3 +183,5 @@ server <- function(input, output, session) {
 
 # Run the app
 shinyApp(ui = ui, server = server)
+}
+# runThreeEventsApp()

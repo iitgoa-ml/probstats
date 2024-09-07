@@ -1,0 +1,222 @@
+library(shiny)
+library(ggplot2)
+
+#' Probability of Repeated Outcomes in Random Events Shiny App
+#'
+#' This Shiny app allows users to explore the probabilities of repeated outcomes
+#' in various random events such as the Birthday Paradox, Dice Rolls, Card Draws, and Coin Flips.
+#' It also includes a simulation feature to visualize the outcomes and highlight repeated events.
+#'
+#' @param none No parameters required
+#' @return A Shiny app interface to explore probabilities and simulate events
+#' @import ggplot2
+#' @import shiny
+#' @examples
+#' run_probability_app()  # Launch the app
+#'
+#' @export
+run_birthday_paradox_app <- function() {
+
+
+# Probability functions for different events
+
+# Birthday paradox
+birthday_prob <- function(n) {
+  if (n == 0) return(0)
+  prob_no_shared <- 1
+  for (i in 0:(n-1)) {
+    prob_no_shared <- prob_no_shared * (365 - i) / 365
+  }
+  return(1 - prob_no_shared)
+}
+
+# Dice throws: Probability of getting the same number at least once in n throws
+dice_prob <- function(n) {
+  if (n == 0) return(0)
+  prob_no_shared <- 1
+  for (i in 0:(n-1)) {
+    prob_no_shared <- prob_no_shared * (6 - i) / 6
+  }
+  return(1 - prob_no_shared)
+}
+
+# Card draws: Probability of getting the same card value at least once in n draws
+cards_prob <- function(n) {
+  if (n == 0) return(0)
+  prob_no_shared <- 1
+  for (i in 0:(n-1)) {
+    prob_no_shared <- prob_no_shared * (52 - i) / 52
+  }
+  return(1 - prob_no_shared)
+}
+
+# Coin flips: Probability of getting heads at least twice in n flips
+coin_prob <- function(n) {
+  if (n == 0) return(0)
+  prob_no_shared <- 1
+  for (i in 0:(n-1)) {
+    prob_no_shared <- prob_no_shared * (2 - i) / 2
+  }
+  return(1 - prob_no_shared)
+}
+
+# Simulate birthdays (or similar event) and detect shared outcomes
+simulate_event <- function(n, type) {
+  if (type == "Birthday Paradox") {
+    outcomes <- sample(1:365, n, replace = TRUE)
+  } else if (type == "Dice Rolls") {
+    outcomes <- sample(1:6, n, replace = TRUE)
+  } else if (type == "Card Draws") {
+    outcomes <- sample(1:52, n, replace = TRUE)  # Use 13 for card values
+  } else if (type == "Coin Flips") {
+    outcomes <- sample(c("Heads", "Tails"), n, replace = TRUE)
+  }
+
+  duplicates <- duplicated(outcomes)
+  return(list(outcomes = outcomes, duplicates = duplicates))
+}
+
+# UI for the Shiny app
+ui <- fluidPage(
+  titlePanel("Probability of Repeated Outcomes in Random Events"),
+
+  sidebarLayout(
+    sidebarPanel(
+      h3("Explore Repeated Outcomes in Random Events"),
+      p("This app visualizes the probability of repeated outcomes (e.g., same birthday, dice number, card value, or coin flip result) occurring at least once as the number of trials (n) changes."),
+
+      selectInput("event_type", "Select Event:",
+                  choices = c("Birthday Paradox", "Dice Rolls", "Card Draws", "Coin Flips"),
+                  selected = "Birthday Paradox"),
+
+      sliderInput("num_trials", "Number of Trials (n):", min = 1, max = 365, value = 23),
+
+      actionButton("simulate", "Simulate"),
+      br(),
+
+      actionButton("runSimulation", "Run Simulation"),
+      hr(),
+
+      h4("Probability Meter"),
+      uiOutput("probMeter"),  # Dynamic probability meter
+      helpText("Displays the probability of observing a repeated outcome in the selected event scenario based on the number of trials.")
+    ),
+
+    mainPanel(
+      plotOutput("probPlot"),
+      textOutput("probText"),
+
+      hr(),
+      h4("Simulation of Repeated Outcomes"),
+      plotOutput("simulationPlot"),  # Visualizes simulation outcomes and repeats
+      helpText("Visualizes the outcomes of trials, highlighting where repeated outcomes occur (e.g., shared birthdays, identical dice numbers).")
+    )
+  )
+)
+
+# Server logic for the Shiny app
+server <- function(input, output, session) {
+
+  # Update the slider range based on selected event
+  observeEvent(input$event_type, {
+    if (input$event_type == "Birthday Paradox") {
+      updateSliderInput(session, "num_trials", min = 1, max = 366, value = 23)
+    } else if (input$event_type == "Dice Rolls") {
+      updateSliderInput(session, "num_trials", min = 1, max = 10, value = 2)
+    } else if (input$event_type == "Card Draws") {
+      updateSliderInput(session, "num_trials", min = 1, max = 60, value = 2)
+    } else if (input$event_type == "Coin Flips") {
+      updateSliderInput(session, "num_trials", min = 1, max = 6, value = 2)
+    }
+  })
+
+  # Simulate based on the selected event
+  observeEvent(input$simulate, {
+    n <- input$num_trials
+    event <- input$event_type
+    prob <- 0
+
+    if (event == "Birthday Paradox") {
+      prob <- birthday_prob(n)
+    } else if (event == "Dice Rolls") {
+      prob <- dice_prob(n)
+    } else if (event == "Card Draws") {
+      prob <- cards_prob(n)
+    } else if (event == "Coin Flips") {
+      prob <- coin_prob(n)
+    }
+
+    # Output the probability text
+    output$probText <- renderText({
+      paste("With", n, "trials, the probability of observing a repeated outcome at least once in the selected scenario is approximately", round(prob * 100, 3), "%.")
+    })
+
+    # Create a sequence for plotting the probability
+    max_trials <- switch(input$event_type,
+                         "Birthday Paradox" = 366,
+                         "Dice Rolls" = 10,
+                         "Card Draws" = 60,
+                         "Coin Flips" = 6)
+
+    trials_seq <- 1:max_trials
+    prob_seq <- sapply(trials_seq, switch(input$event_type,
+                                          "Birthday Paradox" = birthday_prob,
+                                          "Dice Rolls" = dice_prob,
+                                          "Card Draws" = cards_prob,
+                                          "Coin Flips" = coin_prob))
+
+    # Plot the probability curve
+    output$probPlot <- renderPlot({
+      ggplot(data = data.frame(trials = trials_seq, probability = prob_seq), aes(x = trials, y = probability)) +
+        geom_line(color = "blue", size = 1.2) +
+        geom_vline(xintercept = n, linetype = "dashed", color = "red") +
+        ggtitle(paste("Probability of Repeated Outcome for", event)) +
+        xlab("Number of Trials (n)") +
+        ylab("Probability") +
+        scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+        theme_minimal()
+    })
+
+    # Probability meter
+    output$probMeter <- renderUI({
+      progressBarColor <- ifelse(prob > 0.5, "bg-danger", "bg-success")
+      shiny::tags$div(class = "progress",
+                      shiny::tags$div(class = paste("progress-bar", progressBarColor),
+                                      role = "progressbar", style = paste0("width:", round(prob * 100), "%;"),
+                                      paste(round(prob * 100, 2), "%")))
+    })
+  })
+
+  # Run outcome simulation
+  observeEvent(input$runSimulation, {
+    n <- input$num_trials
+    event <- input$event_type
+    simulation_data <- simulate_event(n, event)
+
+    # Plot the outcomes and highlight duplicates
+    output$simulationPlot <- renderPlot({
+      df <- data.frame(Trial = 1:n, Outcome = simulation_data$outcomes, Duplicate = simulation_data$duplicates)
+
+      ggplot(df, aes(x = factor(Trial), y = Outcome)) +
+        geom_point(aes(color = Duplicate), size = 4) +
+        scale_color_manual(values = c("black", "red"), labels = c("Unique", "Duplicate")) +
+        ggtitle(paste(event, "Simulation Results")) +
+        xlab("Trial") +
+        ylab("Outcome") +
+        theme_minimal() +
+        {
+          if (event == "Coin Flips") {
+            scale_y_discrete()
+          } else {
+            scale_y_continuous()
+          }
+        } +
+        theme(axis.text.y = element_text(size = 8))  # Adjust text size for visibility
+    })
+  })
+}
+
+# Run the app
+shinyApp(ui = ui, server = server)
+}
+# run_birthday_paradox_app()

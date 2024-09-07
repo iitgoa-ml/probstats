@@ -1,5 +1,5 @@
-library(shiny)
 
+library(shiny)
 
 #' Launch the Probability Calculator with Operations Shiny App
 #'
@@ -23,6 +23,7 @@ library(shiny)
 #' @return
 #' A Shiny web application object that runs locally in the user's web browser.
 #'
+#' @import shiny
 #' @examples
 #' if (interactive()) {
 #'   run_discrete_app()
@@ -30,6 +31,7 @@ library(shiny)
 #'
 #' @export
 run_discrete_app <- function() {
+
 
   ui <- fluidPage(
   titlePanel("Probability Calculator with Operations"),

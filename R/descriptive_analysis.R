@@ -13,12 +13,18 @@ library(readxl)
 #' and create various plots such as histograms, boxplots, and scatter plots.
 #'
 #' @return The Shiny app is launched in the default web browser.
+#' @import ggplot2
+#' @import shiny
+#' @import palmerpenguins
+#' @import DT
+#' @import readxl
 #' @examples
 #' if (interactive()) {
 #'   run_descriptive_analysis_app()
 #' }
 #' @export
 run_descriptive_analysis_app <- function(){
+
 
 # Define the User Interface (UI) of the Shiny App
 
@@ -29,10 +35,9 @@ ui <- shiny::fluidPage(
       shiny::fileInput("file", "Upload Excel File:", accept = c(".xlsx")),
       shiny::actionButton("addFile", "Add Another Excel File"),
       shiny::actionButton("removeSheet", "Remove Current Sheet"),
+      shiny::radioButtons("plotType", "Plot Type:", choices = c("Histogram", "Boxplot", "Scatter Plot")),
       shiny::uiOutput("datasetSelect"),
       shiny::uiOutput("varselect"),
-      shiny::uiOutput("fillselect"),
-      shiny::radioButtons("plotType", "Plot Type:", choices = c("Histogram", "Boxplot", "Scatter Plot")),
       shiny::conditionalPanel(
         condition = "input.plotType == 'Histogram'",
         shiny::sliderInput("numbins", "Number of Bins:", min = 5, max = 50, value = 30)
@@ -40,10 +45,15 @@ ui <- shiny::fluidPage(
       shiny::conditionalPanel(
         condition = "input.plotType == 'Scatter Plot'",
         shiny::uiOutput("scattervarselect")  # Second variable for scatter plot
-      )
+      ),
+      shiny::uiOutput("fillselect"),
     ),
     shiny::mainPanel(
       shiny::plotOutput("plot"),
+      shiny::conditionalPanel(
+        condition = "input.plotType == 'Scatter Plot'",
+        shiny::verbatimTextOutput("correlationOutput")  # Display the correlation below the graph
+      ),
       DT::DTOutput("table")
     )
   )
@@ -69,6 +79,17 @@ server <- function(input, output, session) {
     sheets(updated_sheets)
     if (length(updated_sheets) > 0) {
       shiny::updateSelectInput(session, "dataset", choices = updated_sheets, selected = updated_sheets[1])
+    }
+  })
+  # Display correlation coefficient separately below the graph
+  output$correlationOutput <- shiny::renderPrint({
+    dataset <- datasetInput()
+    var <- input$variable
+    scatterVar <- input$scattervar
+
+    if (input$plotType == "Scatter Plot" && !is.null(var) && !is.null(scatterVar)) {
+      correlation <- cor(dataset[[var]], dataset[[scatterVar]], use = "complete.obs")
+      paste("Correlation Coefficient between", var, "and", scatterVar, ":", round(correlation, 2))
     }
   })
 
@@ -143,6 +164,9 @@ server <- function(input, output, session) {
             p <- ggplot2::ggplot(dataset, ggplot2::aes_string(x = var, y = scatterVar, color = fillVar))
           }
           p <- p + ggplot2::geom_point() + ggplot2::labs(title = paste("Scatter Plot of", var, "vs", scatterVar))
+          # Calculate correlation
+          correlation <- cor(dataset[[var]], dataset[[scatterVar]], use = "complete.obs")
+          p <- p + ggplot2::annotate("text", x = Inf, y = Inf, label = paste("Correlation:", round(correlation, 2)), hjust = 1.1, vjust = 1.1, size = 5, color = "blue")
         }
       }
       print(p)
@@ -157,3 +181,4 @@ server <- function(input, output, session) {
 
   shiny::shinyApp(ui = ui, server = server)
 }
+# run_descriptive_analysis_app()
