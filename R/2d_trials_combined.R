@@ -1,14 +1,11 @@
-library(shiny)
-library(ggplot2)
-library(dplyr)
 
-#' Run the Two Events Visualization Shiny App
+#' Run the Two Experiments Visualization Shiny App
 #'
-#' This function launches a Shiny app that visualizes the outcomes of two events (Coin Toss or Dice Roll).
-#' Users can select event types, choose outcomes, and interactively visualize probabilities and regions.
+#' This function launches a Shiny app that visualizes the outcomes of two experiments (Coin Toss or Dice Roll).
+#' Users can select experiment types, choose outcomes, and interactively visualize probabilities and outcomes.
 #'
 #' Features:
-#' - Select between "Coin Toss" or "Dice Roll" for two events.
+#' - Select between "Coin Toss" or "Dice Roll" for two experiments.
 #' - Choose specific outcomes for each event or explore an interactive mode.
 #' - Visualize the probability and outcomes on a 2D plot.
 #'
@@ -19,20 +16,25 @@ library(dplyr)
 #' @import dplyr
 #' @examples
 #' if (interactive()) {
-#'   runTwoEventsApp()
+#'   run_two_experiments_app()
 #' }
 #'
 #' @export
-runTwoEventsApp <- function() {
+run_two_experiments_app <- function() {
+
+  library(shiny)
+  library(ggplot2)
+  library(dplyr)
+
 
   ui <- fluidPage(
-  titlePanel("Two Events Visualization"),
+  titlePanel("Two Experiments Visualization"),
   sidebarLayout(
     sidebarPanel(
-      h4("Select Event Type"),
+      h4("Select Experiment Types"),
       checkboxInput("interactive", "Interactive Mode", FALSE),
-      selectInput("eventType1", "First Event Type:", choices = c("Coin Toss", "Dice Roll")),
-      selectInput("eventType2", "Second Event Type:", choices = c("Coin Toss", "Dice Roll")),
+      selectInput("eventType1", "First Experiment Type:", choices = c("Coin Toss", "Dice Roll")),
+      selectInput("eventType2", "Second Experiment Type:", choices = c("Coin Toss", "Dice Roll")),
 
       uiOutput("event1Choices"),  # Outcome selection for Event 1
       uiOutput("event2Choices"),  # Outcome selection for Event 2
@@ -62,9 +64,9 @@ server <- function(input, output, session) {
   output$event1Choices <- renderUI({
     if (!input$interactive) {
       if (input$eventType1 == "Coin Toss") {
-        checkboxGroupInput("event1", "First Event Outcomes:", choices = c("Head", "Tail"))
+        checkboxGroupInput("event1", "First Experiment Outcomes:", choices = c("Head", "Tail"))
       } else {
-        checkboxGroupInput("event1", "First Event Numbers:", choices = as.character(1:6))
+        checkboxGroupInput("event1", "First Experiment Outcomes:", choices = as.character(1:6))
       }
     }
   })
@@ -72,9 +74,9 @@ server <- function(input, output, session) {
   output$event2Choices <- renderUI({
     if (!input$interactive) {
       if (input$eventType2 == "Coin Toss") {
-        checkboxGroupInput("event2", "Second Event Outcomes:", choices = c("Head", "Tail"))
+        checkboxGroupInput("event2", "Second Experiment Outcomes:", choices = c("Head", "Tail"))
       } else {
-        checkboxGroupInput("event2", "Second Event Numbers:", choices = as.character(1:6))
+        checkboxGroupInput("event2", "Second Experiment Outcomes:", choices = as.character(1:6))
       }
     }
   })
@@ -117,7 +119,7 @@ server <- function(input, output, session) {
 
   output$totalOutcomes <- renderText({
     total_outcomes <- (if (input$eventType1 == "Coin Toss") 2 else 6) * (if (input$eventType2 == "Coin Toss") 2 else 6)
-    paste("Total Number of Regions: ", total_outcomes)
+    paste("Total Possible Outcomes:: ", total_outcomes)
   })
 
 
@@ -131,7 +133,7 @@ server <- function(input, output, session) {
       selected_event <- with(outcomes, First_Event %in% input$event1 & Second_Event %in% input$event2)
       favorable_outcomes <- sum(selected_event)
     }
-    paste("Selected Number of Regions: ", favorable_outcomes)
+    paste("Favourable Outcomes:: ", favorable_outcomes)
   })
 
   output$probability <- renderText({
@@ -189,9 +191,9 @@ server <- function(input, output, session) {
       geom_tile(aes(fill = Color), color = "black", width = 1, height = 1) +
       scale_fill_identity() +
       theme_minimal() +
-      labs(x = paste(input$eventType1, "(First Event)"),
-           y = paste(input$eventType2, "(Second Event)"),
-           title = "Outcome Visualization for Two Events") +
+      labs(x = paste(input$eventType1, "(First Experiment)"),
+           y = paste(input$eventType2, "(Second Experiment)"),
+           title = "Outcome Visualization for Two Experiments") +
       theme(axis.text.x = element_text(size = 14),
             axis.text.y = element_text(size = 14),
             panel.grid = element_blank())
@@ -201,3 +203,4 @@ server <- function(input, output, session) {
   shinyApp(ui = ui, server = server)
 }
 
+# runTwoEventsApp()

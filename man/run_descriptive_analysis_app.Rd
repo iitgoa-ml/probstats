@@ -11,7 +11,7 @@ The Shiny app is launched in the default web browser.
 }
 \description{
 This function launches the Shiny app for descriptive analysis of datasets.
-The app allows users to upload Excel files, select datasets (including built-in datasets like \code{iris} and \code{palmerpenguins}),
+The app allows users to upload Excel files, select datasets (including built-in datasets like `iris` and `palmerpenguins`),
 and create various plots such as histograms, boxplots, and scatter plots.
 }
 \examples{

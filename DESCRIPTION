@@ -1,19 +1,21 @@
-Package: ShinyApp
-Title: Descriptive Analysis Shiny App for Data Visualization
+Package: ProbabilityConceptVisualizer
+Type: Package
+Title: Visualize and Analyse Probability and Statistics Concepts
 Version: 0.1.0
-Authors@R: 
-    person("Sarthak", "Choudhary", email = "choudharysarthak124@gmail.com", role = c("aut", "cre"))
+Author: Who wrote it
+Maintainer: The package maintainer <choudharysarthak124@gmail.com>
 Description: A Shiny application for visualizing probability concepts, including probability trees, Bayes' theorem, and test result probabilities, using built-in and user-uploaded data.
 License: MIT + file LICENSE
 Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
+LazyData: true
 RoxygenNote: 7.3.2
-Imports: 
-    dplyr,
+Imports:
     DT,
+    dplyr,
     ggplot2,
     gridExtra,
     palmerpenguins,
+    plotly,
     readxl,
     shiny,
-    plotly
+    zoo

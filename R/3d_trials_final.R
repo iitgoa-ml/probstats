@@ -1,13 +1,12 @@
-library(shiny)
-library(plotly)
+
 
 #' Run the Three Events Visualization Shiny App
 #'
-#' This function launches a Shiny app that visualizes the outcomes of three events (Coin Toss or Dice Roll).
-#' Users can select event types and outcomes, and visualize probabilities and selected outcomes in a 3D plot.
+#' This function launches a Shiny app that visualizes the outcomes of three experiments (Coin Toss or Dice Roll).
+#' Users can select experiment types and outcomes, and visualize probabilities and selected outcomes in a 3D plot.
 #'
 #' Features:
-#' - Select between "Coin Toss" or "Dice Roll" for three different events.
+#' - Select between "Coin Toss" or "Dice Roll" for three different experiments.
 #' - Choose specific outcomes for each event.
 #' - Visualize the probability of selected outcomes and display a 3D scatter plot of possible results.
 #'
@@ -17,22 +16,25 @@ library(plotly)
 #' @import plotly
 #' @examples
 #' if (interactive()) {
-#'   runThreeEventsApp()
+#'   run_three_experiments_app()
 #' }
 #'
 #' @export
-runThreeEventsApp <- function() {
+run_three_experiments_app <- function() {
+
+  library(shiny)
+  library(plotly)
 
 
 # Define the UI
 ui <- fluidPage(
-  titlePanel("Three Events Visualization"),
+  titlePanel("Three Experiments Visualization"),
   sidebarLayout(
     sidebarPanel(
       h4("Select Event Type"),
-      selectInput("eventType1", "First Event Type:", choices = c("Coin Toss", "Dice Roll")),
-      selectInput("eventType2", "Second Event Type:", choices = c("Coin Toss", "Dice Roll")),
-      selectInput("eventType3", "Third Event Type:", choices = c("Coin Toss", "Dice Roll")),
+      selectInput("eventType1", "First Experiment Type:", choices = c("Coin Toss", "Dice Roll")),
+      selectInput("eventType2", "Second Experiment Type:", choices = c("Coin Toss", "Dice Roll")),
+      selectInput("eventType3", "Third Experiment Type:", choices = c("Coin Toss", "Dice Roll")),
 
       uiOutput("event1Choices"),
       uiOutput("event2Choices"),
@@ -82,25 +84,25 @@ server <- function(input, output, session) {
   # Dynamically generate choices based on selected event type
   output$event1Choices <- renderUI({
     if (input$eventType1 == "Coin Toss") {
-      checkboxGroupInput("event1", "First Event Outcomes:", choices = c("Head", "Tail"))
+      checkboxGroupInput("event1", "First Experiment Outcomes:", choices = c("Head", "Tail"))
     } else {
-      checkboxGroupInput("event1", "First Event Numbers:", choices = as.character(1:6))
+      checkboxGroupInput("event1", "First Experiment Outcomes:", choices = as.character(1:6))
     }
   })
 
   output$event2Choices <- renderUI({
     if (input$eventType2 == "Coin Toss") {
-      checkboxGroupInput("event2", "Second Event Outcomes:", choices = c("Head", "Tail"))
+      checkboxGroupInput("event2", "Second Experiment Outcomes:", choices = c("Head", "Tail"))
     } else {
-      checkboxGroupInput("event2", "Second Event Numbers:", choices = as.character(1:6))
+      checkboxGroupInput("event2", "Second Experiment Outcomes:", choices = as.character(1:6))
     }
   })
 
   output$event3Choices <- renderUI({
     if (input$eventType3 == "Coin Toss") {
-      checkboxGroupInput("event3", "Third Event Outcomes:", choices = c("Head", "Tail"))
+      checkboxGroupInput("event3", "Third Experiment Outcomes:", choices = c("Head", "Tail"))
     } else {
-      checkboxGroupInput("event3", "Third Event Numbers:", choices = as.character(1:6))
+      checkboxGroupInput("event3", "Third Experiment Outcomes:", choices = as.character(1:6))
     }
   })
 
@@ -159,9 +161,9 @@ server <- function(input, output, session) {
     ) %>%
       layout(
         scene = list(
-          xaxis = list(title = paste(input$eventType1, "(First Event)")),
-          yaxis = list(title = paste(input$eventType2, "(Second Event)")),
-          zaxis = list(title = paste(input$eventType3, "(Third Event)"))
+          xaxis = list(title = paste(input$trialType1, "(First Experiment)")),
+          yaxis = list(title = paste(input$trialType2, "(Second Experiment)")),
+          zaxis = list(title = paste(input$trialType3, "(Third Experiment)"))
         ),
         title = "Outcome Visualization for Three Events",
         margin = list(l = 0, r = 0, b = 0, t = 30)  # Adjust margins to give more space
