@@ -2,7 +2,7 @@ Package: ProbabilityConceptVisualizer
 Type: Package
 Title: Visualize and Analyse Probability and Statistics Concepts
 Version: 0.1.0
-Author: Who wrote it
+Author: Sarthak Choudhary
 Maintainer: The package maintainer <choudharysarthak124@gmail.com>
 Description: A Shiny application for visualizing probability concepts, including probability trees, Bayes' theorem, and test result probabilities, using built-in and user-uploaded data.
 License: MIT + file LICENSE

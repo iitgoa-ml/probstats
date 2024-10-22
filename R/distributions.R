@@ -54,7 +54,7 @@ run_distribution_visualizer_app <- function() {
         uiOutput("intervalInputs"),
         hr(),
 
-        actionButton("calculate", "Calculate Probability", class = "btn-primary")
+        actionButton("calculate", "Visualize", class = "btn-primary")
       ),
 
       mainPanel(
@@ -138,6 +138,11 @@ run_distribution_visualizer_app <- function() {
         })
       }
     })
+    # Automatically update numRanges when numVars changes
+    observe({
+      updateNumericInput(session, "numRanges", value = input$numVars)
+      updateNumericInput(session, "numIntervals", value = input$numVars)
+    })
 
     # Generate UI inputs for variable ranges (only for Uniform)
     output$rangeInputs <- renderUI({
@@ -146,9 +151,9 @@ run_distribution_visualizer_app <- function() {
 
       lapply(1:numRanges, function(i) {
         fluidRow(
-          column(4, numericInput(paste0("range", i, "_min"), paste("Range", i, "Min Value:"), value = 0)),
-          column(4, selectInput(paste0("range", i, "_var"), paste("Range", i, "Variable:"), choices = 1:numVars)),
-          column(4, numericInput(paste0("range", i, "_max"), paste("Range", i, "Max Value:"), value = 1))
+          column(4, numericInput(paste0("range", i, "_min"), paste("Range", i, "Min Value:"), value = -3)),
+          column(4, selectInput(paste0("range", i, "_var"), paste("Range", i, "Variable:"), choices = 1:numVars, selected = i)),
+          column(4, numericInput(paste0("range", i, "_max"), paste("Range", i, "Max Value:"), value = 3))
         )
       })
     })
@@ -160,9 +165,9 @@ run_distribution_visualizer_app <- function() {
 
       lapply(1:numIntervals, function(i) {
         fluidRow(
-          column(4, numericInput(paste0("interval", i, "_min"), paste("Interval", i, "Min Value:"), value = 0)),
-          column(4, selectInput(paste0("interval", i, "_var"), paste("Interval", i, "Variable:"), choices = 1:numVars)),
-          column(4, numericInput(paste0("interval", i, "_max"), paste("Interval", i, "Max Value:"), value = 0.5))
+          column(4, numericInput(paste0("interval", i, "_min"), paste("Interval", i, "Min Value:"), value = -2)),
+          column(4, selectInput(paste0("interval", i, "_var"), paste("Interval", i, "Variable:"), choices = 1:numVars, selected = i)),
+          column(4, numericInput(paste0("interval", i, "_max"), paste("Interval", i, "Max Value:"), value = 2))
         )
       })
     })
@@ -530,14 +535,8 @@ run_distribution_visualizer_app <- function() {
                 theme_minimal() +
                 theme(axis.text.x = element_text(size = 12))
 
-              #temp <- v*2 - 1
+              plot_list[[v]] <- gridExtra::grid.arrange(p_density, p_cdf, ncol = 2)
 
-              #plot_list[[temp]] <- p
-              #plot_list[[v*2]] <- p_cdf
-
-              plot_list[[v]] <- gridExtra::grid.arrange(p_density, p_cdf, ncol = 2) # Or use patchwork: (p_density + p_cdf)
-
-              # plot_list[[v]] <- p_cdf
             }
           } else if (input$distribution == "binomial") {
             size_val <- ranges$size[ranges$var == v]
