@@ -13,6 +13,8 @@ can select either concept, choose parameters for different distributions or
 experiments, and visualize the respective results.
 }
 \examples{
+\dontrun{
 run_clt_lln_app() # This function runs the Shiny app.
+}
 
 }

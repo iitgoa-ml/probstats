@@ -11,7 +11,7 @@ This function launches a Shiny application that visualizes a probability tree
 for disease prevalence, test sensitivity, and test specificity.
 }
 \examples{
-if (interactive()) {
-  run_probability_tree_app()
+\dontrun{
+run_probability_tree_app() # Launch the app
 }
 }

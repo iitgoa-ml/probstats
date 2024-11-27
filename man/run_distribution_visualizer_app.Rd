@@ -16,7 +16,7 @@ and calculate both joint and individual probabilities. The app also provides vis
 of the defined ranges and intervals.
 }
 \examples{
-if (interactive()) {
-  run_distribution_visualizer_app()
+\dontrun{
+run_distribution_visualizer_app() # Run shiny app
 }
 }

@@ -8,8 +8,8 @@
 #' @import shiny
 #' @import ggplot2
 #' @examples
-#' if (interactive()) {
-#'   run_probability_tree_app()
+#' \dontrun{
+#' run_probability_tree_app() # Launch the app
 #' }
 #' @export
 run_probability_tree_app <- function() {
@@ -158,4 +158,4 @@ server <- function(input, output) {
 
 shinyApp(ui, server)
 }
-# run_probability_tree_app()
+run_probability_tree_app()

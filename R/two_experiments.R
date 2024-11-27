@@ -15,8 +15,8 @@
 #' @import shiny
 #' @import dplyr
 #' @examples
-#' if (interactive()) {
-#'   run_two_experiments_app()
+#' \dontrun{
+#' run_two_experiments_app() # Run shiny app
 #' }
 #'
 #' @export
@@ -203,4 +203,4 @@ server <- function(input, output, session) {
   shinyApp(ui = ui, server = server)
 }
 
-# runTwoEventsApp()
+run_two_experiments_app()

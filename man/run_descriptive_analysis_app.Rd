@@ -15,7 +15,7 @@ The app allows users to upload Excel files, select datasets (including built-in 
 and create various plots such as histograms, boxplots, and scatter plots.
 }
 \examples{
-if (interactive()) {
-  run_descriptive_analysis_app()
+\dontrun{
+run_descriptive_analysis_app() # Run the app
 }
 }

@@ -14,8 +14,8 @@
 #' @import DT
 #' @import readxl
 #' @examples
-#' if (interactive()) {
-#'   run_descriptive_analysis_app()
+#' \dontrun{
+#' run_descriptive_analysis_app() # Run the app
 #' }
 #' @export
 run_descriptive_analysis_app <- function(){
@@ -24,7 +24,7 @@ run_descriptive_analysis_app <- function(){
   library(shiny)
   library(palmerpenguins)
   library(ggplot2)
-  # library(DT)
+  library(DT)
   library(readxl)
 
 
@@ -183,4 +183,4 @@ server <- function(input, output, session) {
 
   shinyApp(ui = ui, server = server)
 }
-# run_descriptive_analysis_app()
+run_descriptive_analysis_app()

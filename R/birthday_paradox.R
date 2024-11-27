@@ -11,7 +11,9 @@
 #' @import ggplot2
 #' @import shiny
 #' @examples
-#' run_probability_app()  # Launch the app
+#' \dontrun{
+#' run_birthday_paradox_app()  # Launch the app
+#' }
 #'
 #' @export
 run_birthday_paradox_app <- function() {
@@ -261,4 +263,4 @@ run_birthday_paradox_app <- function() {
 }
 
 # Run the app
-# run_birthday_paradox_app()
+run_birthday_paradox_app()

@@ -8,7 +8,9 @@
 #' @import zoo
 #' @import shiny
 #' @examples
+#' \dontrun{
 #' run_clt_lln_app() # This function runs the Shiny app.
+#' }
 #'
 #' @export
 run_clt_lln_app <- function() {
@@ -138,4 +140,4 @@ run_clt_lln_app <- function() {
   # Run the Shiny app
   shinyApp(ui, server)
 }
-# run_clt_lln_app()
+run_clt_lln_app()

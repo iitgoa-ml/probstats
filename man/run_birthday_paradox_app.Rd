@@ -18,6 +18,8 @@ in various random events such as the Birthday Paradox, Dice Rolls, Card Draws, a
 It also includes a simulation feature to visualize the outcomes and highlight repeated events.
 }
 \examples{
-run_probability_app()  # Launch the app
+\dontrun{
+run_birthday_paradox_app()  # Launch the app
+}
 
 }

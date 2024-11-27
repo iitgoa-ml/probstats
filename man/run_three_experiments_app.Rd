@@ -20,8 +20,8 @@ Features:
 - Visualize the probability of selected outcomes and display a 3D scatter plot of possible results.
 }
 \examples{
-if (interactive()) {
-  run_three_experiments_app()
+\dontrun{
+run_three_experiments_app() # Run shiny app
 }
 
 }

@@ -15,8 +15,8 @@
 #' @import shiny
 #' @import plotly
 #' @examples
-#' if (interactive()) {
-#'   run_three_experiments_app()
+#' \dontrun{
+#' run_three_experiments_app() # Run shiny app
 #' }
 #'
 #' @export
@@ -186,4 +186,4 @@ server <- function(input, output, session) {
 # Run the app
 shinyApp(ui = ui, server = server)
 }
-# runThreeEventsApp()
+run_three_experiments_app()

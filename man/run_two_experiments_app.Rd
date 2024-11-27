@@ -20,8 +20,8 @@ Features:
 - Visualize the probability and outcomes on a 2D plot.
 }
 \examples{
-if (interactive()) {
-  run_two_experiments_app()
+\dontrun{
+run_two_experiments_app() # Run shiny app
 }
 
 }

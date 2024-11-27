@@ -10,18 +10,17 @@
 #' @return The Shiny app is launched in the default web browser.
 #' @import ggplot2
 #' @import shiny
-#' @import dplyr
 #' @import gridExtra
 #' @examples
-#' if (interactive()) {
-#'   run_distribution_visualizer_app()
+#' \dontrun{
+#' run_distribution_visualizer_app() # Run shiny app
 #' }
 #' @export
 run_distribution_visualizer_app <- function() {
 
   library(shiny)
   library(ggplot2)
-  library(dplyr)
+  #library(dplyr)
   library(gridExtra)
 
 
@@ -39,7 +38,7 @@ run_distribution_visualizer_app <- function() {
       sidebarPanel(
         width = 3,
         selectInput("distribution", "Select Distribution",
-                    choices = c("Uniform" = "uniform", "Normal" = "normal", "Exponential"="exponential", "Binomial" = "binomial")),
+                    choices = c("Uniform" = "uniform", "Normal" = "normal", "Exponential"="exponential", "Binomial" = "binomial", "Geometric" = "geometric")),
         uiOutput("distribution_equations"),  # Display PDF, CDF equations above everything
 
         hr(),
@@ -134,6 +133,14 @@ run_distribution_visualizer_app <- function() {
             column(6, numericInput(paste0("size", i), paste("Number of Trials (n) for Variable", i), value = 10, min = 1)),
             column(6, numericInput(paste0("prob", i), paste("Probability of Success (p) for Variable", i), value = 0.5, min = 0, max = 1)),
             numericInput("num_simulations", paste("Number of Simulations (N) for variable:", i), value = 1000, min = 20)
+          )
+        })
+      } else if (input$distribution == "geometric") {
+        # UI elements for Geometric distribution
+        lapply(1:numVars, function(i) {
+          fluidRow(
+            column(6, numericInput(paste0("prob", i), paste("Probability of Success (p) for Variable", i),
+                                   value = 0.5, min = 0.01, max = 1))
           )
         })
       }
@@ -271,6 +278,24 @@ run_distribution_visualizer_app <- function() {
 
           ranges <- rbind(ranges, data.frame(size = size_val, prob = prob_val, var = i))
         }
+      } else if (input$distribution == "geometric") {
+        ranges <- data.frame(
+          prob = numeric(),
+          var = integer(),
+          stringsAsFactors = FALSE
+        )
+
+        for (i in 1:numVars) {
+          prob_val <- input[[paste0("prob", i)]]
+
+          # Validate input
+          if (prob_val <= 0 || prob_val > 1) {
+            showNotification(paste("Error in Variable", i, ": Probability should be between 0 and 1."), type = "error")
+            return(NULL)
+          }
+
+          ranges <- rbind(ranges, data.frame(prob = prob_val, var = i))
+        }
       }
 
       intervals <- data.frame(
@@ -376,6 +401,27 @@ run_distribution_visualizer_app <- function() {
               max_int <- floor(merged_intervals$max[i])
               if (min_int > max_int) return(0)
               pbinom(max_int, size = size_val, prob = prob_val) - pbinom(min_int - 1, size = size_val, prob = prob_val)
+            }))
+          }
+
+          return(interval_prob)
+        } else if (input$distribution == "geometric") {
+          prob_val <- ranges$prob[ranges$var == v]
+          var_intervals <- intervals %>% filter(var == v)
+
+          if (nrow(var_intervals) == 0) {
+            interval_prob <- 0
+          } else {
+            merged_intervals <- merge_intervals(var_intervals)
+            interval_prob <- sum(sapply(1:nrow(merged_intervals), function(i) {
+              min_int <- ceiling(merged_intervals$min[i])
+              max_int <- floor(merged_intervals$max[i])
+
+              # If invalid range, return 0
+              if (min_int > max_int) return(0)
+
+              # Geometric CDF calculation
+              pgeom(max_int - 1, prob = prob_val) - pgeom(min_int - 1, prob = prob_val)
             }))
           }
 
@@ -626,6 +672,55 @@ run_distribution_visualizer_app <- function() {
               # Combine both plots into the plot list
               plot_list[[v]] <- gridExtra::grid.arrange(p, p_cdf, ncol = 2)
             }
+          } else if (input$distribution == "geometric") {
+            prob_val <- ranges$prob[ranges$var == v]
+            var_intervals <- intervals %>% filter(var == v)
+
+            if (nrow(var_intervals) > 0) {
+              merged_intervals <- merge_intervals(var_intervals)
+
+              # Prepare data for plotting
+              max_plot_val <- max(floor(max(intervals$max)), 10)
+              geom_df <- data.frame(
+                x = 0:max_plot_val,
+                y = dgeom(0:max_plot_val, prob = prob_val)
+              )
+
+              # CDF data
+              geom_cdf_df <- data.frame(
+                x = 0:max_plot_val,
+                cdf = pgeom(0:max_plot_val, prob = prob_val)
+              )
+
+              # Highlighted intervals
+              highlight_df <- data.frame()
+              for (i in 1:nrow(merged_intervals)) {
+                min_int <- ceiling(merged_intervals$min[i])
+                max_int <- floor(merged_intervals$max[i])
+                if (min_int > max_int) next
+                highlight_df <- rbind(highlight_df, data.frame(x = min_int:max_int))
+              }
+              highlight_df$y <- dgeom(highlight_df$x, prob = prob_val)
+              highlight_df$cdf <- pgeom(highlight_df$x, prob = prob_val)
+
+              # Plot PMF
+              p <- ggplot(geom_df, aes(x = x, y = y)) +
+                geom_bar(stat = "identity", fill = "skyblue", alpha = 0.5) +
+                geom_bar(data = highlight_df, aes(x = x, y = y), stat = "identity", fill = "orange", alpha = 0.7) +
+                labs(x = paste("Variable", v), y = "PMF") +
+                theme_minimal()
+
+              # CDF Plot
+              p_cdf <- ggplot(geom_cdf_df, aes(x = x, y = cdf)) +
+                #geom_line(color = "blue") +
+                geom_bar(stat = "identity", fill = "#4A90E2", alpha = 0.5) +
+                geom_bar(data = highlight_df, aes(x = x, y = cdf), stat = "identity", fill = "orange", alpha = 0.7) +
+                labs(x = paste("Variable", v), y = "CDF") +
+                theme_minimal()
+
+              # Combine plots using gridExtra
+              plot_list[[v]] <- gridExtra::grid.arrange(p, p_cdf, ncol = 2)
+            }
           }
         }
 
@@ -638,4 +733,4 @@ run_distribution_visualizer_app <- function() {
 
   shiny::shinyApp(ui = ui, server = server)
 }
-# run_distribution_visualizer_app()
+run_distribution_visualizer_app()
