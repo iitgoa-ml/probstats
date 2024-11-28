@@ -183,4 +183,4 @@ server <- function(input, output, session) {
 
   shinyApp(ui = ui, server = server)
 }
-run_descriptive_analysis_app()
+# run_descriptive_analysis_app()

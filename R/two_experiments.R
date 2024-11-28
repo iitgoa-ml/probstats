@@ -203,4 +203,4 @@ server <- function(input, output, session) {
   shinyApp(ui = ui, server = server)
 }
 
-run_two_experiments_app()
+# run_two_experiments_app()

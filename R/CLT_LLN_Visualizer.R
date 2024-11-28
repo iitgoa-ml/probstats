@@ -1,31 +1,31 @@
-#' Statistical Concepts Explorer: CLT and LLN
+#' Statistical Concepts Explorer: CLT and WLLN
 #'
-#' This Shiny app allows users to explore two important statistical concepts:
-#' the Central Limit Theorem (CLT) and the Law of Large Numbers (LLN). Users
-#' can select either concept, choose parameters for different distributions or
-#' experiments, and visualize the respective results.
+#' This Shiny app allows users to explore two foundational statistical concepts:
+#' the Central Limit Theorem (CLT) and the Weak Law of Large Numbers (WLLN).
+#' Users can select either concept, choose parameters for different distributions
+#' or experiments, and visualize the respective results.
 #'
 #' @import zoo
 #' @import shiny
 #' @examples
 #' \dontrun{
-#' run_clt_lln_app() # This function runs the Shiny app.
+#' run_clt_wlln_app() # This function runs the Shiny app.
 #' }
 #'
 #' @export
-run_clt_lln_app <- function() {
+run_clt_wlln_app <- function() {
 
   library(shiny)
   library(zoo)
 
   # Define UI
   ui <- fluidPage(
-    titlePanel("Visualizing Central Limit Theorem and Law of Large Numbers"),
+    titlePanel("Visualizing Central Limit Theorem and Weak Law of Large Numbers"),
 
     sidebarLayout(
       sidebarPanel(
         # Dropdown to select either CLT or LLN
-        selectInput("appMode", "Select Mode:", choices = c("Central Limit Theorem", "Law of Large Numbers")),
+        selectInput("appMode", "Select Mode:", choices = c("Central Limit Theorem", "Weak Law of Large Numbers")),
 
         # Conditional Panels for each mode
         conditionalPanel(
@@ -53,10 +53,18 @@ run_clt_lln_app <- function() {
         ),
 
         conditionalPanel(
-          condition = "input.appMode == 'Law of Large Numbers'",
-          sliderInput("numTrials", "Number of Trials:", min = 10, max = 5000, value = 100),
+          condition = "input.appMode == 'Weak Law of Large Numbers'",
           selectInput("experiment", "Experiment Type:",
-                      choices = c("Coin Flip", "Dice Roll", "Custom")),
+                      choices = c("Coin Flip", "Dice Roll", "Beta Distribution")),
+
+          conditionalPanel(
+            condition = "input.experiment == 'Beta Distribution'",
+            numericInput("alpha", "Alpha (α):", value = 2),
+            numericInput("beta", "Beta (β):", value = 5)
+          ),
+          sliderInput("numTrials", "Number of Trials:", min = 10, max = 5000, value = 100),
+
+
           sliderInput("windowSize", "Rolling Average Window:", min = 1, max = 100, value = 10),
           checkboxInput("showMean", "Show Theoretical Mean", value = TRUE)
         )
@@ -93,14 +101,14 @@ run_clt_lln_app <- function() {
           curve(dnorm(x, mean = mean(sampleMeans), sd = sd(sampleMeans)), add = TRUE, col = "red", lwd = 2)
         }
 
-      } else if (input$appMode == "Law of Large Numbers") {
-        # Law of Large Numbers logic
+      } else if (input$appMode == "Weak Law of Large Numbers") {
+        # Weak Law of Large Numbers logic
         set.seed(123)
 
         trials <- switch(input$experiment,
                          "Coin Flip" = sample(c(0, 1), input$numTrials, replace = TRUE),
                          "Dice Roll" = sample(1:6, input$numTrials, replace = TRUE),
-                         "Custom" = rbeta(input$numTrials, 2, 5))
+                         "Beta Distribution" = rbeta(input$numTrials, input$alpha, input$beta))
 
         cumulativeAvg <- cumsum(trials) / seq_along(trials)
         windowSize <- input$windowSize
@@ -116,7 +124,7 @@ run_clt_lln_app <- function() {
         lines(rollingAvg, col = "green", lwd = 2, lty = 2)
 
         # Show theoretical mean if checkbox is checked
-        trueMean <- if (input$experiment == "Coin Flip") 0.5 else if (input$experiment == "Dice Roll") 3.5 else mean(rbeta(10000, 2, 5))
+        trueMean <- if (input$experiment == "Coin Flip") 0.5 else if (input$experiment == "Dice Roll") 3.5 else mean(rbeta(10000, input$alpha, input$beta))
         if (input$showMean) {
           abline(h = trueMean, col = "red", lty = 2)
         }
@@ -130,7 +138,7 @@ run_clt_lln_app <- function() {
                "the distribution of sample means approaches a normal distribution, ",
                "regardless of the population distribution.")
       } else {
-        paste("The Law of Large Numbers shows that as the number of trials increases, ",
+        paste("The Weak Law of Large Numbers shows that as the number of trials increases, ",
               "the sample mean converges to the expected value. ",
               "The rolling average window smooths the data over the specified window size.")
       }
@@ -140,4 +148,4 @@ run_clt_lln_app <- function() {
   # Run the Shiny app
   shinyApp(ui, server)
 }
-run_clt_lln_app()
+# run_clt_wlln_app()

@@ -337,4 +337,4 @@ run_markov_chain_visualizer <- function(){
   # Run App
   shinyApp(ui = ui, server = server)
 }
-run_markov_chain_visualizer()
+# run_markov_chain_visualizer()

@@ -1,10 +1,56 @@
 
 # ProbabilityConceptVisualizer
 
-An R package containing interactive Shiny applications to help students
-visualize and understand key probability concepts.
+**ProbabilityConceptVisualizer** is an R package designed to help
+students and educators explore key concepts in probability and
+statistics. This package includes interactive Shiny apps that make
+learning these topics more engaging and easier to understand through
+visualizations and simulations.
+
+## Key Features
+
+- **Interactive Learning**: Provides hands-on experiences with apps that
+  let users change parameters and see results immediately.
+
+- **Wide Range of Topics**: Covers important probability topics like the
+  Birthday Paradox, probability trees, Markov Chains, and experiments
+  such as coin tosses and dice rolls. It also includes statistics
+  concepts like the Central Limit Theorem and the Weak Law of Large
+  Numbers.
+
+- **Educational Design**: Created with students and educators in mind,
+  offering clear instructions and examples to support teaching and
+  learning.
+
+- **User-Friendly Interface**: Each app is easy to use, making it
+  accessible for everyone, from beginners to those with more experience.
+
+## Target Audience
+
+This package is perfect for:
+
+- **Students**: Those starting out in probability and statistics who
+  will benefit from interactive and visual learning tools.
+
+- **Educators**: Teachers and professors looking for effective ways to
+  explain statistical and probability concepts in the classroom.
+
+## Applications
+
+- **Classroom Use**: A great addition to probability and statistics
+  courses, providing interactive tools to complement traditional
+  teaching.
+
+- **Workshops and Training**: Enhance learning experiences in workshops
+  with dynamic visual tools.
+
+- **Self-Study**: Allows students to explore and understand concepts on
+  their own through interactive learning.
 
 ------------------------------------------------------------------------
+
+With this understanding of the package, you can proceed to install and
+explore the various applications it offers.
 
 ## Installation
 
@@ -50,13 +96,13 @@ library(ProbabilityConceptVisualizer)
 
 To run a specific Shiny app, use one of the following functions:
 
-- `run_birthday_paradox_app()`
-- `run_clt_lln_app()`
-- `run_descriptive_analysis_app()`
-- `run_distribution_visualizer_app()`
-- `run_probability_tree_app()`
-- `run_three_experiments_app()`
-- `run_two_experiments_app()`
+- [`run_descriptive_analysis_app()`](#descriptive-analysis-app)
+- [`run_two_experiments_app()`](#two-experiments-visualization-app)
+- [`run_three_experiments_app()`](#three-experiments-visualization-app)
+- [`run_birthday_paradox_app()`](#probability-of-repeated-outcomes-in-random-events-visualizer)
+- [`run_clt_wlln_app()`](#central-limit-theorem-and-weak-law-of-large-numbers-app)
+- [`run_distribution_visualizer_app()`](#probability-distributions-visualizer)
+- [`run_probability_tree_app()`](#probability-tree-visualization-app)
 
 **Note:** An active internet connection is required to display equations
 correctly, as the package uses MathJax for rendering LaTeX in the
@@ -66,8 +112,7 @@ browser.
 
 ## Apps Overview
 
-Below is detailed documentation for each app. Follow this format for
-consistency.
+Below is detailed documentation for each app.
 
 ------------------------------------------------------------------------
 
@@ -136,70 +181,6 @@ alt="Scatter Plot Example" />
 
 ------------------------------------------------------------------------
 
-### Central Limit Theorem and Law of Large Numbers App
-
-This Shiny app allows users to explore two important statistical
-concepts: the **Central Limit Theorem (CLT)** and the **Law of Large
-Numbers (LLN)**.
-
-#### Key Features
-
-- Visualize the Central Limit Theorem by generating sample means from
-  various distributions.
-- Explore the Law of Large Numbers by observing convergence of sample
-  averages.
-- Interactive controls for choosing distribution types, adjusting
-  parameters, and toggling visualization options.
-
-#### How to Use
-
-1.  Launch the app:
-
-    ``` r
-    library(ProbabilityConceptVisualizer)
-    run_clt_lln_app()
-    ```
-
-2.  Choose a mode (CLT or LLN) from the dropdown menu.
-
-3.  Adjust the settings in the sidebar to customize the visualizations.
-
-#### User Interface
-
-- **CLT Mode**:
-  - Select distribution type: Uniform, Exponential, or Binomial.
-  - Adjust parameters like `min` and `max` for Uniform, `rate` for
-    Exponential, or `size` and `prob` for Binomial.
-  - Modify sliders for sample size, number of samples, and histogram
-    bins.
-  - Toggle theoretical normal curve display.
-- **LLN Mode**:
-  - Choose an experiment type: Coin Flip, Dice Roll, or Custom.
-  - Adjust number of trials and rolling average window.
-  - Optionally, overlay the theoretical mean on the plot.
-
-#### Example Visualizations
-
-**Central Limit Theorem Mode**:  
-*Visualization of sample means forming a normal distribution.*
-
-<figure>
-<img src="man/figures/clt.png" alt="CLT Histogram Sample Means" />
-<figcaption aria-hidden="true">CLT Histogram Sample Means</figcaption>
-</figure>
-
-**Law of Large Numbers Mode**:  
-*Observation of sample averages converging to the expected value.*
-
-<figure>
-<img src="man/figures/lln.png" alt="LLN Convergence" />
-<figcaption aria-hidden="true">LLN Convergence</figcaption>
-</figure>
-
-------------------------------------------------------------------------
-
-------------------------------------------------------------------------
-
 ### Two Experiments Visualization App
 
 This Shiny app allows users to explore the outcomes of two experiments
@@ -251,6 +232,152 @@ or dice roll).*
 alt="Two Experiments Visualization" />
 <figcaption aria-hidden="true">Two Experiments
 Visualization</figcaption>
+</figure>
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+### Three Experiments Visualization App
+
+This Shiny app visualizes the outcomes of three experiments: Coin Toss
+or Dice Roll. Users can select different experiment types and outcomes,
+and visualize the probability of selected outcomes in a 3D scatter plot.
+
+#### Key Features
+
+- Select between “Coin Toss” or “Dice Roll” for three different
+  experiments.
+- Choose specific outcomes for each event.
+- Visualize the probability of selected outcomes in a 3D scatter plot.
+- Display statistics for favorable outcomes, total outcomes, and event
+  probability.
+
+#### How to Use
+
+1.  Launch the app:
+
+    ``` r
+    library(ProbabilityConceptVisualizer)
+    run_three_experiments_app()  # Run the Shiny app
+    ```
+
+2.  Select the type of experiment for each of the three events (Coin
+    Toss or Dice Roll).
+
+3.  Choose the specific outcomes you want to observe for each
+    experiment.
+
+4.  Press the “Refresh Visualization” button to update the plot and
+    statistics.
+
+5.  View the 3D scatter plot of possible outcomes and the calculated
+    statistics.
+
+#### User Interface
+
+- **Input Parameters**:
+  - Select event types for the three experiments (Coin Toss or Dice
+    Roll).
+  - Choose specific outcomes for each event (e.g., Heads or Tails for
+    Coin Toss, or numbers 1 to 6 for Dice Roll).
+- **Visualizations**:
+  - **3D Scatter Plot**: Displays the possible outcomes for all three
+    events, with selected outcomes highlighted.
+- **Event Statistics**:
+  - **Favorable Outcomes**: Number of outcomes that match your criteria.
+  - **Total Outcomes**: Total possible outcomes based on selected event
+    types.
+  - **Probability of Event**: Probability of the event (favorable
+    outcomes / total outcomes).
+
+#### Example Visualizations
+
+**3D Scatter Plot**:  
+*A 3D plot showing the possible outcomes of the three events, with
+selected outcomes highlighted.*
+
+<figure>
+<img src="man/figures/three_experiments.png" alt="3D Scatter Plot" />
+<figcaption aria-hidden="true">3D Scatter Plot</figcaption>
+</figure>
+
+#### Mathematical Formulas
+
+The probability is calculated based on the selected outcomes for each
+event:
+
+- **Favorable Outcomes**: The number of outcomes that match the user’s
+  selected outcomes.
+- **Total Outcomes**: The total number of possible outcomes for the
+  three experiments, determined by the product of the number of choices
+  for each experiment.
+- **Event Probability**:
+  $$ P(\text{Event}) = \frac{\text{Number of Favorable Outcomes}}{\text{Total Number of Outcomes}} $$
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+### Central Limit Theorem and Weak Law of Large Numbers App
+
+This Shiny app allows users to explore two important statistical
+concepts: the **Central Limit Theorem (CLT)** and the **Weak Law of
+Large Numbers (LLN)**.
+
+#### Key Features
+
+- Visualize the Central Limit Theorem by generating sample means from
+  various distributions.
+- Explore the Weak Law of Large Numbers by observing convergence of
+  sample averages.
+- Interactive controls for choosing distribution types, adjusting
+  parameters, and toggling visualization options.
+
+#### How to Use
+
+1.  Launch the app:
+
+    ``` r
+    library(ProbabilityConceptVisualizer)
+    run_clt_wlln_app()
+    ```
+
+2.  Choose a mode (CLT or WLLN) from the dropdown menu.
+
+3.  Adjust the settings in the sidebar to customize the visualizations.
+
+#### User Interface
+
+- **CLT Mode**:
+  - Select distribution type: Uniform, Exponential, or Binomial.
+  - Adjust parameters like `min` and `max` for Uniform, `rate` for
+    Exponential, or `size` and `prob` for Binomial.
+  - Modify sliders for sample size, number of samples, and histogram
+    bins.
+  - Toggle theoretical normal curve display.
+- **WLLN Mode**:
+  - Choose an experiment type: Coin Flip, Dice Roll, or Beta
+    Distribution.
+  - Adjust number of trials and rolling average window.
+  - Optionally, overlay the theoretical mean on the plot.
+
+#### Example Visualizations
+
+**Central Limit Theorem Mode**:  
+*Visualization of sample means forming a normal distribution.*
+
+<figure>
+<img src="man/figures/clt.png" alt="CLT Histogram Sample Means" />
+<figcaption aria-hidden="true">CLT Histogram Sample Means</figcaption>
+</figure>
+
+**Weak Law of Large Numbers Mode**:  
+*Observation of sample averages converging to the expected value.*
+
+<figure>
+<img src="man/figures/lln.png" alt="WLLN Convergence" />
+<figcaption aria-hidden="true">WLLN Convergence</figcaption>
 </figure>
 
 ------------------------------------------------------------------------
@@ -348,7 +475,7 @@ alt="Probability Pie Charts" />
 
 ------------------------------------------------------------------------
 
-### Probability of Repeated Outcomes in Random Events Shiny App
+### Probability of Repeated Outcomes in Random Events Visualizer
 
 This Shiny app allows users to explore the probabilities of repeated
 outcomes in various random events such as the Birthday Paradox, Dice
@@ -448,7 +575,7 @@ equation:
 
 ------------------------------------------------------------------------
 
-### Probability Tree Shiny App for Disease and Test Result
+### Probability Tree Visualization App
 
 This Shiny app visualizes a probability tree to help understand disease
 prevalence, test sensitivity, and test specificity. The app calculates
@@ -537,88 +664,9 @@ The app uses the following formulas for probability calculations:
 
 ------------------------------------------------------------------------
 
-### Three Events Visualization Shiny App
-
-This Shiny app visualizes the outcomes of three experiments: Coin Toss
-or Dice Roll. Users can select different experiment types and outcomes,
-and visualize the probability of selected outcomes in a 3D scatter plot.
-
-#### Key Features
-
-- Select between “Coin Toss” or “Dice Roll” for three different
-  experiments.
-- Choose specific outcomes for each event.
-- Visualize the probability of selected outcomes in a 3D scatter plot.
-- Display statistics for favorable outcomes, total outcomes, and event
-  probability.
-
-#### How to Use
-
-1.  Launch the app:
-
-    ``` r
-    library(ProbabilityConceptVisualizer)
-    run_three_experiments_app()  # Run the Shiny app
-    ```
-
-2.  Select the type of experiment for each of the three events (Coin
-    Toss or Dice Roll).
-
-3.  Choose the specific outcomes you want to observe for each
-    experiment.
-
-4.  Press the “Refresh Visualization” button to update the plot and
-    statistics.
-
-5.  View the 3D scatter plot of possible outcomes and the calculated
-    statistics.
-
-#### User Interface
-
-- **Input Parameters**:
-  - Select event types for the three experiments (Coin Toss or Dice
-    Roll).
-  - Choose specific outcomes for each event (e.g., Heads or Tails for
-    Coin Toss, or numbers 1 to 6 for Dice Roll).
-- **Visualizations**:
-  - **3D Scatter Plot**: Displays the possible outcomes for all three
-    events, with selected outcomes highlighted.
-- **Event Statistics**:
-  - **Favorable Outcomes**: Number of outcomes that match your criteria.
-  - **Total Outcomes**: Total possible outcomes based on selected event
-    types.
-  - **Probability of Event**: Probability of the event (favorable
-    outcomes / total outcomes).
-
-#### Example Visualizations
-
-**3D Scatter Plot**:  
-*A 3D plot showing the possible outcomes of the three events, with
-selected outcomes highlighted.*
-
-<figure>
-<img src="man/figures/three_experiments.png" alt="3D Scatter Plot" />
-<figcaption aria-hidden="true">3D Scatter Plot</figcaption>
-</figure>
-
-#### Mathematical Formulas
-
-The probability is calculated based on the selected outcomes for each
-event:
-
-- **Favorable Outcomes**: The number of outcomes that match the user’s
-  selected outcomes.
-- **Total Outcomes**: The total number of possible outcomes for the
-  three experiments, determined by the product of the number of choices
-  for each experiment.
-- **Event Probability**:
-  $$ P(\text{Event}) = \frac{\text{Number of Favorable Outcomes}}{\text{Total Number of Outcomes}} $$
-
 ------------------------------------------------------------------------
 
-------------------------------------------------------------------------
-
-### Distribution Probability Visualizer
+### Probability Distributions Visualizer
 
 This Shiny app provides an interactive platform to explore probabilities
 under various statistical distributions, including Uniform, Normal,

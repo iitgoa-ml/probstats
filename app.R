@@ -3,4 +3,4 @@ library(available) # Check if the Title of a Package is Available,
 # Check for potential names
 available::suggest("Probability Concept Visualizer")
 # Check whether it's available
-available::available("ProbabilityViz", browse = FALSE)
+available::available("probstats", browse = FALSE)

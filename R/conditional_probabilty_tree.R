@@ -158,4 +158,4 @@ server <- function(input, output) {
 
 shinyApp(ui, server)
 }
-run_probability_tree_app()
+# run_probability_tree_app()

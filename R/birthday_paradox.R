@@ -263,4 +263,4 @@ run_birthday_paradox_app <- function() {
 }
 
 # Run the app
-run_birthday_paradox_app()
+# run_birthday_paradox_app()
