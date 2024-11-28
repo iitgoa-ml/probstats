@@ -93,7 +93,7 @@ To run a specific Shiny app, use one of the following functions:
 - [`run_clt_wlln_app()`](#central-limit-theorem-and-weak-law-of-large-numbers-app)
 - [`run_distribution_visualizer_app()`](#probability-distributions-visualizer)
 - [`run_probability_tree_app()`](#probability-tree-visualization-app)
-
+- [`run_markov_chain_visualizer()`](#markov-chain-weather-state-visualizer)
 
 
 
@@ -311,7 +311,7 @@ This Shiny app simulates weather transitions using a Markov Chain model. It allo
 #### How to Use
 
 1. Launch the app:
-   ```r 
+   ```r
    library(ProbabilityConceptVisualizer)
    run_markov_chain_visualizer()
    ```

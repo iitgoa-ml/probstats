@@ -712,6 +712,7 @@ automatically installed if not already available: - <code>DT</code> -
 <li><a href="#central-limit-theorem-and-weak-law-of-large-numbers-app"><code>run_clt_wlln_app()</code></a></li>
 <li><a href="#probability-distributions-visualizer"><code>run_distribution_visualizer_app()</code></a></li>
 <li><a href="#probability-tree-visualization-app"><code>run_probability_tree_app()</code></a></li>
+<li><a href="#markov-chain-weather-state-visualizer"><code>run_markov_chain_visualizer()</code></a></li>
 </ul>
 <p><strong>Note:</strong> An active internet connection is required to
 display equations correctly, as the package uses MathJax for rendering
@@ -984,15 +985,16 @@ probability plots, and pie charts.</li>
 </ul>
 <h4 id="how-to-use-4">How to Use</h4>
 <ol style="list-style-type: decimal">
-<li>Launch the app:
-<code>```{=html} &lt;div style=&quot;width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;&quot; class=&quot;muted well&quot;&gt;Shiny applications not supported in static R Markdown documents&lt;/div&gt; ```</code></li>
-<li>Define the transition matrix. Each row represents the probabilities
-of transitioning from one state to others.</li>
-<li>Set the initial probabilities for states: Sunny, Cloudy, and
-Rainy.</li>
-<li>Specify the number of simulation steps and click “Run
-Simulation.”</li>
-<li>Observe results via visualizations such as:
+<li><p>Launch the app:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">library</span>(ProbabilityConceptVisualizer)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">run_markov_chain_visualizer</span>()</span></code></pre></div></li>
+<li><p>Define the transition matrix. Each row represents the
+probabilities of transitioning from one state to others.</p></li>
+<li><p>Set the initial probabilities for states: Sunny, Cloudy, and
+Rainy.</p></li>
+<li><p>Specify the number of simulation steps and click “Run
+Simulation.”</p></li>
+<li><p>Observe results via visualizations such as:</p>
 <ul>
 <li><strong>State Transition Diagram</strong>: Shows transitions between
 states with probabilities.</li>
@@ -1080,8 +1082,8 @@ simulations.</li>
 <h4 id="how-to-use-5">How to Use</h4>
 <ol style="list-style-type: decimal">
 <li><p>Launch the app:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">library</span>(ProbabilityConceptVisualizer)</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">run_birthday_paradox_app</span>()  <span class="co"># Launch the app</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">library</span>(ProbabilityConceptVisualizer)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">run_birthday_paradox_app</span>()  <span class="co"># Launch the app</span></span></code></pre></div></li>
 <li><p>Select an event type (Birthday Paradox, Dice Rolls, Card Draws,
 or Coin Flips).</p></li>
 <li><p>Adjust the number of samples (<code>n</code>) and simulate
@@ -1178,8 +1180,8 @@ diagrams.</li>
 <h4 id="how-to-use-6">How to Use</h4>
 <ol style="list-style-type: decimal">
 <li><p>Launch the app:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">library</span>(ProbabilityConceptVisualizer)</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">run_probability_tree_app</span>()  <span class="co"># Launch the app</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">library</span>(ProbabilityConceptVisualizer)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">run_probability_tree_app</span>()  <span class="co"># Launch the app</span></span></code></pre></div></li>
 <li><p>Adjust the values for prevalence (<code>P(D)</code>), sensitivity
 (<code>P(T | D)</code>), and specificity
 (<code>P(~T | ~D)</code>).</p></li>
@@ -1266,8 +1268,8 @@ empirical results.</li>
 <h4 id="how-to-use-7">How to Use</h4>
 <ol style="list-style-type: decimal">
 <li><p>Launch the app:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">library</span>(ProbabilityConceptVisualizer)</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">run_distribution_visualizer_app</span>()</span></code></pre></div></li>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">library</span>(ProbabilityConceptVisualizer)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">run_distribution_visualizer_app</span>()</span></code></pre></div></li>
 <li><p>Choose a probability distribution:</p>
 <ul>
 <li>Uniform</li>

@@ -103,6 +103,7 @@ To run a specific Shiny app, use one of the following functions:
 - [`run_clt_wlln_app()`](#central-limit-theorem-and-weak-law-of-large-numbers-app)
 - [`run_distribution_visualizer_app()`](#probability-distributions-visualizer)
 - [`run_probability_tree_app()`](#probability-tree-visualization-app)
+- [`run_markov_chain_visualizer()`](#markov-chain-weather-state-visualizer)
 
 **Note:** An active internet connection is required to display equations
 correctly, as the package uses MathJax for rendering LaTeX in the
@@ -404,12 +405,21 @@ time through interactive visualizations.
 #### How to Use
 
 1.  Launch the app:
-    ```` ```{=html} <div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div> ``` ````
+
+    ``` r
+    library(ProbabilityConceptVisualizer)
+    run_markov_chain_visualizer()
+    ```
+
 2.  Define the transition matrix. Each row represents the probabilities
     of transitioning from one state to others.
+
 3.  Set the initial probabilities for states: Sunny, Cloudy, and Rainy.
+
 4.  Specify the number of simulation steps and click “Run Simulation.”
+
 5.  Observe results via visualizations such as:
+
     - **State Transition Diagram**: Shows transitions between states
       with probabilities.
     - **Probability Evolution Plot**: Displays state probabilities over
