@@ -2,7 +2,7 @@
 % Please edit documentation in R/birthday_paradox.R
 \name{run_birthday_paradox_app}
 \alias{run_birthday_paradox_app}
-\title{Probability of Repeated Outcomes in Random Events Shiny App}
+\title{Intuitive Exploration of the Birthday Paradox and Related Probabilities}
 \usage{
 run_birthday_paradox_app()
 }
@@ -10,12 +10,16 @@ run_birthday_paradox_app()
 \item{none}{No parameters required}
 }
 \value{
-A Shiny app interface to explore probabilities and simulate events
+A Shiny app interface to explore the Birthday Paradox and related random event probabilities
 }
 \description{
-This Shiny app allows users to explore the probabilities of repeated outcomes
-in various random events such as the Birthday Paradox, Dice Rolls, Card Draws, and Coin Flips.
-It also includes a simulation feature to visualize the outcomes and highlight repeated events.
+This Shiny app focuses on helping users build intuition about the Birthday Paradox—
+the counterintuitive probability of shared birthdays in groups of people.
+It also allows users to compare this phenomenon with other random events, such as repeated outcomes
+in dice rolls, card draws, and coin flips, to deepen understanding of probability concepts.
+}
+\details{
+The app includes interactive probability visualizations, event simulations, and tools for exploring repeated outcomes across multiple iterations.
 }
 \examples{
 \dontrun{

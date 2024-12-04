@@ -2,27 +2,29 @@
 % Please edit documentation in R/markovchain_example.R
 \name{run_markov_chain_visualizer}
 \alias{run_markov_chain_visualizer}
-\title{Markov Chain Weather State Visualizer}
+\title{Learn Markov Chains: State Transition Visualizer}
 \usage{
 run_markov_chain_visualizer()
 }
 \description{
-This Shiny app simulates weather transitions using a Markov Chain model.
-Users can configure a transition matrix, set initial probabilities,
-and observe the evolution of state probabilities over time.
-Visualizations include state transition diagrams, probability plots,
-and pie charts for initial and final state distributions.
+This Shiny app provides an interactive way to explore and understand Markov Chains
+using a relatable example of weather states (Sunny, Cloudy, Rainy).
+Users can configure the transition matrix, set initial probabilities,
+and observe how the probabilities of states evolve over time.
 }
 \details{
+The app helps users grasp core Markov Chain concepts such as state transitions,
+steady-state behavior, and the impact of initial conditions on long-term dynamics.
+
 Key features:
-- Validate transition matrix and initial probabilities.
-- Visualize probability evolution over time.
+- Validate the transition matrix and initial probabilities.
+- Visualize the evolution of state probabilities over time.
 - Analyze steady-state probabilities using eigenvalues or linear equations.
-- Dynamic representations of state transitions and probabilities.
+- Dynamic visualizations of state transitions, probability plots, and distributions.
 }
 \examples{
 \dontrun{
-run_markov_chain_visualizer() # Launches the Markov Chain visualizer Shiny app.
+run_markov_chain_visualizer() # Launches the Markov Chain Visualizer Shiny app.
 }
 
 }

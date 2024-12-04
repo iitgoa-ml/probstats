@@ -38,7 +38,7 @@ run_distribution_visualizer_app <- function() {
       sidebarPanel(
         width = 3,
         selectInput("distribution", "Select Distribution",
-                    choices = c("Uniform" = "uniform", "Normal" = "normal", "Exponential"="exponential", "Binomial" = "binomial", "Geometric" = "geometric")),
+                    choices = c("Uniform" = "uniform", "Normal" = "normal", "Exponential"="exponential", "Binomial" = "binomial", "Geometric" = "geometric", "Poisson" = "poisson")),
         uiOutput("distribution_equations"),  # Display PDF, CDF equations above everything
 
         hr(),
@@ -132,7 +132,7 @@ run_distribution_visualizer_app <- function() {
           fluidRow(
             column(6, numericInput(paste0("size", i), paste("Number of Trials (n) for Variable", i), value = 10, min = 1)),
             column(6, numericInput(paste0("prob", i), paste("Probability of Success (p) for Variable", i), value = 0.5, min = 0, max = 1)),
-            numericInput("num_simulations", paste("Number of Simulations (N) for variable:", i), value = 1000, min = 20)
+            numericInput("num_simulations", paste("Simulation Sample Count (N) for variable:", i), value = 1000, min = 20)
           )
         })
       } else if (input$distribution == "geometric") {
@@ -143,7 +143,15 @@ run_distribution_visualizer_app <- function() {
                                    value = 0.5, min = 0.01, max = 1))
           )
         })
+      }    else if (input$distribution == "poisson") {
+        lapply(1:numVars, function(i) {
+          fluidRow(
+            column(6, numericInput(paste0("lambda", i), paste("Lambda (λ) for Variable", i), value = 1, min = 0)),
+            column(6, numericInput(paste0("time_range", i), paste("Max Time Range for Variable", i), value = 10, min = 0))
+          )
+        })
       }
+
     })
     # Automatically update numRanges when numVars changes
     observe({
@@ -296,7 +304,26 @@ run_distribution_visualizer_app <- function() {
 
           ranges <- rbind(ranges, data.frame(prob = prob_val, var = i))
         }
+      }    else if (input$distribution == "poisson") {
+        ranges <- data.frame(
+          lambda = numeric(),
+          var = integer(),
+          stringsAsFactors = FALSE
+        )
+
+        for (i in 1:numVars) {
+          lambda_val <- input[[paste0("lambda", i)]]
+
+          # Validate input
+          if (lambda_val <= 0) {
+            showNotification(paste("Error in Variable", i, ": Lambda should be greater than 0."), type = "error")
+            return(NULL)
+          }
+
+          ranges <- rbind(ranges, data.frame(lambda = lambda_val, var = i))
+        }
       }
+
 
       intervals <- data.frame(
         min = numeric(),
@@ -422,6 +449,27 @@ run_distribution_visualizer_app <- function() {
 
               # Geometric CDF calculation
               pgeom(max_int - 1, prob = prob_val) - pgeom(min_int - 1, prob = prob_val)
+            }))
+          }
+
+          return(interval_prob)
+        } else if (input$distribution == "poisson") {
+          lambda_val <- ranges$lambda[ranges$var == v]
+          var_intervals <- intervals %>% filter(var == v)
+
+          if (nrow(var_intervals) == 0) {
+            interval_prob <- 0
+          } else {
+            merged_intervals <- merge_intervals(var_intervals)
+            interval_prob <- sum(sapply(1:nrow(merged_intervals), function(i) {
+              min_int <- ceiling(merged_intervals$min[i])
+              max_int <- floor(merged_intervals$max[i])
+
+              # If invalid range, return 0
+              if (min_int > max_int) return(0)
+
+              # Poisson CDF calculation
+              ppois(max_int, lambda = lambda_val) - ppois(min_int - 1, lambda = lambda_val)
             }))
           }
 
@@ -721,7 +769,89 @@ run_distribution_visualizer_app <- function() {
               # Combine plots using gridExtra
               plot_list[[v]] <- gridExtra::grid.arrange(p, p_cdf, ncol = 2)
             }
+          }    else if (input$distribution == "poisson") {
+            lambda_val <- ranges$lambda[ranges$var == v]
+            max_time <- input[[paste0("time_range", v)]]
+            var_intervals <- intervals %>% filter(var == v)
+
+            # Create data for the exponential distribution (waiting time)
+            time_vals <- seq(0, max_time, length.out = 100)
+            exp_df <- data.frame(
+              time = time_vals,
+              density = dexp(time_vals, rate = lambda_val)
+            )
+
+            # CDF data
+            exp_cdf_df <- data.frame(
+              time = time_vals,
+              cdf = pexp(time_vals, rate = lambda_val)
+            )
+
+            # Plot density (waiting time)
+            p_waiting_density <- ggplot(exp_df, aes(x = time, y = density)) +
+              geom_line(color = "blue") +
+              labs(x = "Time", y = "Density", title = paste("Waiting Time Density for Variable", v)) +
+              theme_minimal()
+
+            # CDF plot (waiting time)
+            p_waiting_cdf <- ggplot(exp_cdf_df, aes(x = time, y = cdf)) +
+              geom_line(color = "blue") +
+              labs(x = "Time", y = "CDF", title = paste("Waiting Time CDF for Variable", v)) +
+              theme_minimal()
+
+            # Combine plots using gridExtra
+            plot_list[[v]] <- gridExtra::grid.arrange(p_waiting_density, p_waiting_cdf, ncol = 2)
           }
+          else if (input$distribution == "poisson") {
+            lambda_val <- ranges$lambda[ranges$var == v]
+            var_intervals <- intervals %>% filter(var == v)
+
+            if (nrow(var_intervals) > 0) {
+              merged_intervals <- merge_intervals(var_intervals)
+
+              # Prepare data for plotting
+              max_plot_val <- max(floor(max(intervals$max)), 10)
+              poisson_df <- data.frame(
+                x = 0:max_plot_val,
+                y = dpois(0:max_plot_val, lambda = lambda_val)
+              )
+
+              # CDF data
+              poisson_cdf_df <- data.frame(
+                x = 0:max_plot_val,
+                cdf = ppois(0:max_plot_val, lambda = lambda_val)
+              )
+
+              # Highlighted intervals
+              highlight_df <- data.frame()
+              for (i in 1:nrow(merged_intervals)) {
+                min_int <- ceiling(merged_intervals$min[i])
+                max_int <- floor(merged_intervals$max[i])
+                if (min_int > max_int) next
+                highlight_df <- rbind(highlight_df, data.frame(x = min_int:max_int))
+              }
+              highlight_df$y <- dpois(highlight_df$x, lambda = lambda_val)
+              highlight_df$cdf <- ppois(highlight_df$x, lambda = lambda_val)
+
+              # Plot PMF
+              p <- ggplot(poisson_df, aes(x = x, y = y)) +
+                geom_bar(stat = "identity", fill = "skyblue", alpha = 0.5) +
+                geom_bar(data = highlight_df, aes(x = x, y = y), stat = "identity", fill = "orange", alpha = 0.7) +
+                labs(x = paste("Variable", v), y = "PMF") +
+                theme_minimal()
+
+              # CDF Plot
+              p_cdf <- ggplot(poisson_cdf_df, aes(x = x, y = cdf)) +
+                geom_bar(stat = "identity", fill = "#4A90E2", alpha = 0.5) +
+                geom_bar(data = highlight_df, aes(x = x, y = cdf), stat = "identity", fill = "orange", alpha = 0.7) +
+                labs(x = paste("Variable", v), y = "CDF") +
+                theme_minimal()
+
+              # Combine plots using gridExtra
+              plot_list[[v]] <- gridExtra::grid.arrange(p, p_cdf, ncol = 2)
+            }
+          }
+
         }
 
         if (length(plot_list) > 0) {

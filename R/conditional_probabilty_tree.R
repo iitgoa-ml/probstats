@@ -7,6 +7,7 @@
 #'
 #' @import shiny
 #' @import ggplot2
+#' @import shinyBS
 #' @examples
 #' \dontrun{
 #' run_probability_tree_app() # Launch the app
@@ -15,6 +16,7 @@
 run_probability_tree_app <- function() {
   library(shiny)
   library(ggplot2)
+  library(shinyBS)
 
 
 ui <- fluidPage(
@@ -23,9 +25,17 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       numericInput("pD", "Prevalence (P(D)):", 0.01, min = 0, max = 1, step = 0.01),
+      bsTooltip("pD", "Proportion of the population with the disease.", placement = "right"),
       numericInput("pTP", "Sensitivity (P(T | D)):", 0.9, min = 0, max = 1, step = 0.01),
+      bsTooltip("pTP", "Probability of a positive test result given the presence of the disease.", placement = "right"),
       numericInput("pTN", "Specificity (P(~T | ~D)):", 0.95, min = 0, max = 1, step = 0.01),
-      actionButton("recalc", "Recalculate")
+      bsTooltip("pTN", "Probability of a negative test result given the absence of the disease.", placement = "right"),
+      actionButton("recalc", "Recalculate"),
+      br(),
+      tags$div(
+        style = "font-size: 14px; line-height: 1.6;",
+        uiOutput("mathEquations")
+      ) # Styled div for equations
     ),
 
     mainPanel(
@@ -39,6 +49,17 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
+  # Update equations in the sidebar
+  output$mathEquations <- renderUI({
+    withMathJax(
+      helpText(
+        strong("Key Equations:"),
+        "\\[ P(A \\cap B) = P(B | A) \\cdot P(A) \\]",
+        "\\[ P(B) = P(A \\cap B) + P(A^c \\cap B) \\]",
+        "\\[ P(A | B) = \\frac{P(A \\cap B)}{P(B)} \\]"
+      )
+    )
+  })
 
   observeEvent(input$recalc, {
 
@@ -70,10 +91,23 @@ server <- function(input, output) {
       label = c(
         paste0("Disease (P(D) = ", round(pD, 2), ")"),
         paste0("No Disease (P(~D) = ", round(pND, 2), ")"),
-        paste0("Test +ve (P(T|D) = ", round(pTP, 2), ")", "\nP = ", round(total_p_D_T, 4)),
-        paste0("Test -ve (P(~T|D) = ", round(pFN, 2), ")", "\nP = ", round(total_p_D_F, 4)),
-        paste0("Test +ve (P(T|~D) = ", round(pFP, 2), ")", "\nP = ", round(total_p_ND_T, 4)),
-        paste0("Test -ve (P(~T|~D) = ", round(pTN, 2), ")", "\nP = ", round(total_p_ND_F, 4))
+
+        paste0(
+          "Test +ve:\n P(T ∩ D) = P(T|D) . P(D)\n= ",
+          round(pTP, 2), " * ", round(pD, 2), "\nP = ", round(total_p_D_T, 4)
+        ),
+        paste0(
+          "Test -ve:\n P(~T ∩ D) = P(~T|D) . P(D)\n= ",
+          round(pFN, 2), " * ", round(pD, 2), "\nP = ", round(total_p_D_F, 4)
+        ),
+        paste0(
+          "Test +ve:\n P(T ∩ ~D) = P(T|~D) . P(~D)\n= ",
+          round(pFP, 2), " * ", round(pND, 2), "\nP = ", round(total_p_ND_T, 4)
+        ),
+        paste0(
+          "Test -ve:\n P(~T ∩ ~D) = P(~T|~D) . P(~D)\n= ",
+          round(pTN, 2), " * ", round(pND, 2), "\nP = ", round(total_p_ND_F, 4)
+        )
       ),
       event = c("Disease", "No Disease", "Test Positive", "Test Negative", "Test Positive", "Test Negative"),
       color = c("red", "blue", "green", "green", "orange", "orange"),
@@ -111,10 +145,22 @@ server <- function(input, output) {
       label = c(
         paste0("Test +ve (P(T) = ", round(pT, 2), ")"),
         paste0("Test -ve (P(~T) = ", round(p_not_T, 2), ")"),
-        paste0("Disease | Test +ve (P(D|T) = ", round(probs$pD_given_T, 2), ")", "\nP = ", round(total_p_D_T, 4)),
-        paste0("No Disease | Test +ve (P(~D|T) = ", round(1 - probs$pD_given_T, 2), ")", "\nP = ", round(total_p_ND_T, 4)),
-        paste0("Disease | Test -ve (P(D|~T) = ", round(pD_given_not_T, 2), ")", "\nP = ", round(total_p_D_F, 4)),
-        paste0("No Disease | Test -ve (P(~D|~T) = ", round(pND_given_not_T, 2), ")", "\nP = ", round(total_p_ND_F, 4))
+        paste0(
+          "Disease | Test +ve:\n P(D ∩ T) = P(D|T) . P(T)\n= ",
+          round(probs$pD_given_T, 2), " * ", round(pT, 2), "\nP = ", round(total_p_D_T, 4)
+        ),
+        paste0(
+          "No Disease | Test +ve:\n P(~D ∩ T) = P(~D|T) . P(T)\n= ",
+          round(1 - probs$pD_given_T, 2), " * ", round(pT, 2), "\nP = ", round(total_p_ND_T, 4)
+        ),
+        paste0(
+          "Disease | Test -ve:\n P(D ∩ ~T) = P(D|~T) . P(~T)\n= ",
+          round(pD_given_not_T, 2), " * ", round(p_not_T, 2), "\nP = ", round(total_p_D_F, 4)
+        ),
+        paste0(
+          "No Disease | Test -ve:\n P(~D ∩ ~T) = P(~D|~T) . P(~T)\n= ",
+          round(pND_given_not_T, 2), " * ", round(p_not_T, 2), "\nP = ", round(total_p_ND_F, 4)
+        )
       ),
       event = c("Test Positive", "Test Negative", "Disease", "No Disease", "Disease", "No Disease"),
       color = c("green", "green", "red", "blue", "red", "blue"),
@@ -124,6 +170,7 @@ server <- function(input, output) {
     # Plotting functions with adjusted label positions
     output$treePlotDiseaseFirst <- renderPlot({
       ggplot(tree_df_disease_first) +
+        ylim(-0.1, 1.1) +
         xlim(0, 1) +  # Adjust limits to ensure there is space
 
         geom_segment(aes(x = x_start, y = y_start, xend = x_end, yend = y_end, color = event), size = 1.2) +
@@ -140,6 +187,7 @@ server <- function(input, output) {
 
     output$treePlotTestFirst <- renderPlot({
       ggplot(tree_df_test_first) +
+        ylim(-0.1, 1.1) +
         xlim(0, 1) +  # Adjust limits to ensure there is space
 
         geom_segment(aes(x = x_start, y = y_start, xend = x_end, yend = y_end, color = event), size = 1.2) +

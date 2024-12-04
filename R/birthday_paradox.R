@@ -1,13 +1,14 @@
-
-
-#' Probability of Repeated Outcomes in Random Events Shiny App
+#' Intuitive Exploration of the Birthday Paradox and Related Probabilities
 #'
-#' This Shiny app allows users to explore the probabilities of repeated outcomes
-#' in various random events such as the Birthday Paradox, Dice Rolls, Card Draws, and Coin Flips.
-#' It also includes a simulation feature to visualize the outcomes and highlight repeated events.
+#' This Shiny app focuses on helping users build intuition about the Birthday Paradox—
+#' the counterintuitive probability of shared birthdays in groups of people.
+#' It also allows users to compare this phenomenon with other random events, such as repeated outcomes
+#' in dice rolls, card draws, and coin flips, to deepen understanding of probability concepts.
+#'
+#' The app includes interactive probability visualizations, event simulations, and tools for exploring repeated outcomes across multiple iterations.
 #'
 #' @param none No parameters required
-#' @return A Shiny app interface to explore probabilities and simulate events
+#' @return A Shiny app interface to explore the Birthday Paradox and related random event probabilities
 #' @import ggplot2
 #' @import shiny
 #' @examples
@@ -88,11 +89,12 @@ run_birthday_paradox_app <- function() {
 
   # UI for the Shiny app
   ui <- fluidPage(
-    titlePanel("Probability of Repeated Outcomes in Random Events"),
+    titlePanel("Exploring the Birthday Paradox and Related Probabilities"),
     sidebarLayout(
       sidebarPanel(
-        h3("Explore Repeated Outcomes in Random Events"),
-        p("This app visualizes the probability of repeated outcomes (e.g., same birthday, dice number, card value, or coin flip result) occurring at least once as the number of samples (n) changes."),
+        h3("Understanding the Birthday Paradox"),
+        p("This app focuses on the Birthday Paradox, exploring the probability of at least two people in a group sharing the same birthday."),
+        p("To build further intuition, it allows comparisons with other scenarios, such as repeated outcomes in dice rolls, card draws, and coin flips."),
 
         selectInput("event_type", "Select Event:",
                     choices = c("Birthday Paradox", "Dice Rolls", "Card Draws", "Coin Flips"),
@@ -107,8 +109,10 @@ run_birthday_paradox_app <- function() {
         uiOutput("equation"),  # Display the probability equation dynamically
         hr(),
 
-        sliderInput("num_samples", "Number of Samples (n):", min = 1, max = 365, value = 23),
-
+       # sliderInput("sample_size", "Sample Size:",
+      #              min = 1, max = 365, value = 23),
+        # Dynamic slider input with a custom label
+        uiOutput("dynamic_slider"),
 
 
         actionButton("simulate", "Simulate"),
@@ -116,7 +120,7 @@ run_birthday_paradox_app <- function() {
 
         h4("Probability Meter"),
         uiOutput("probMeter"),  # Dynamic probability meter
-        helpText("Displays the probability of observing a repeated outcome in the selected event scenario based on the number of samples."),
+        helpText("Displays the probability of observing a shared birthday or repeated outcome based on the selected scenario."),
 
         hr(),
 
@@ -145,13 +149,13 @@ run_birthday_paradox_app <- function() {
     # Update the slider range based on selected event
     observeEvent(input$event_type, {
       if (input$event_type == "Birthday Paradox") {
-        updateSliderInput(session, "num_samples", min = 1, max = 366, value = 23)
+        updateSliderInput(session, "sample_size", min = 1, max = 366, value = 23)
       } else if (input$event_type == "Dice Rolls") {
-        updateSliderInput(session, "num_samples", min = 1, max = 10, value = 2)
+        updateSliderInput(session, "sample_size", min = 1, max = 10, value = 2)
       } else if (input$event_type == "Card Draws") {
-        updateSliderInput(session, "num_samples", min = 1, max = 60, value = 2)
+        updateSliderInput(session, "sample_size", min = 1, max = 60, value = 9)
       } else if (input$event_type == "Coin Flips") {
-        updateSliderInput(session, "num_samples", min = 1, max = 6, value = 2)
+        updateSliderInput(session, "sample_size", min = 1, max = 6, value = 2)
       }
     })
 
@@ -167,6 +171,7 @@ run_birthday_paradox_app <- function() {
       tags$p(strong("Problem Description: "), description)
     })
 
+
     # Display the probability equation dynamically
     # Display the probability equation dynamically using MathJax with proper math formatting
     output$equation <- renderUI({
@@ -181,10 +186,27 @@ run_birthday_paradox_app <- function() {
         tags$p(strong("Probability Formula: "), formula)
       )
     })
+    # Update the slider range and label based on the selected event
+    output$dynamic_slider <- renderUI({
+      event <- input$event_type
+      slider_label <- switch(event,
+                             "Birthday Paradox" = "Group Size:",
+                             "Dice Rolls" = "Number of Rolls:",
+                             "Card Draws" = "Number of Draws:",
+                             "Coin Flips" = "Number of Flips:")
+
+      max_value <- switch(event,
+                          "Birthday Paradox" = 366,
+                          "Dice Rolls" = 10,
+                          "Card Draws" = 52,
+                          "Coin Flips" = 2)
+
+      sliderInput("sample_size", label = slider_label, min = 1, max = max_value, value = 2)
+    })
 
     # Simulate based on the selected event
     observeEvent(input$simulate, {
-      n <- input$num_samples
+      n <- input$sample_size
       event <- input$event_type
       prob <- 0
 
@@ -241,7 +263,7 @@ run_birthday_paradox_app <- function() {
 
     # Run repeated runs simulation
     observeEvent(input$runSimulation, {
-      n <- input$num_samples
+      n <- input$sample_size
       iterations <- input$num_runs
       event <- input$event_type
       repeated_counts <- run_multiple_simulations(n, iterations, event)
@@ -263,4 +285,4 @@ run_birthday_paradox_app <- function() {
 }
 
 # Run the app
-# run_birthday_paradox_app()
+run_birthday_paradox_app()

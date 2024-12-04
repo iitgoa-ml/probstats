@@ -76,12 +76,12 @@ devtools::install_github("iitgoa-ml/probstats")
 The package requires the following R packages, which will be
 automatically installed if not already available: - `DT` - `dplyr` -
 `ggplot2` - `gridExtra` - `palmerpenguins` - `plotly` - `readxl` -
-`shiny` - `zoo`
+`shiny` - `zoo` - `igraph` - `shinyMatrix`
 
 If necessary, you can install these dependencies manually:
 
 ``` r
-install.packages(c("DT", "dplyr", "ggplot2", "gridExtra", "palmerpenguins", "plotly", "readxl", "shiny", "zoo"))
+install.packages(c("DT", "dplyr", "ggplot2", "gridExtra", "palmerpenguins", "plotly", "readxl", "shiny", "zoo", "igraph", "shinyMatrix"))
 ```
 
 ------------------------------------------------------------------------
@@ -99,7 +99,7 @@ To run a specific Shiny app, use one of the following functions:
 - [`run_descriptive_analysis_app()`](#descriptive-analysis-app)
 - [`run_two_experiments_app()`](#two-experiments-visualization-app)
 - [`run_three_experiments_app()`](#three-experiments-visualization-app)
-- [`run_birthday_paradox_app()`](#probability-of-repeated-outcomes-in-random-events-visualizer)
+- [`run_birthday_paradox_app()`](#birthday-paradox-and-repeated-outcomes-visualizer-app)
 - [`run_clt_wlln_app()`](#central-limit-theorem-and-weak-law-of-large-numbers-app)
 - [`run_distribution_visualizer_app()`](#probability-distributions-visualizer)
 - [`run_probability_tree_app()`](#probability-tree-visualization-app)
@@ -485,76 +485,76 @@ alt="Probability Pie Charts" />
 
 ------------------------------------------------------------------------
 
-### Probability of Repeated Outcomes in Random Events Visualizer
+### Birthday Paradox and Repeated Outcomes Visualizer App
 
-This Shiny app allows users to explore the probabilities of repeated
-outcomes in various random events such as the Birthday Paradox, Dice
-Rolls, Card Draws, and Coin Flips. It also includes a simulation feature
-to visualize the outcomes and highlight repeated events.
+This Shiny app is designed to help users intuitively explore the
+fascinating and counterintuitive probability of shared birthdays in the
+**Birthday Paradox**. Users can visualize how the probability changes
+with group size and compare this phenomenon with repeated outcomes in
+other random events like dice rolls, card draws, and coin flips.
 
 #### Key Features
 
-- Visualize probabilities of repeated outcomes in different random
-  events.
-- Simulate random events and visualize the distribution of repeated
-  outcomes.
-- Adjust parameters like the number of samples and iterations for
-  simulations.
+- **Explore the Birthday Paradox**: Understand why shared birthdays are
+  more likely than expected in groups of 23 or more people.
+- Compare with other events: Build intuition by exploring probabilities
+  of repeated outcomes in dice rolls, card draws, and coin flips.
+- Simulate outcomes: Visualize how repeated events occur across multiple
+  iterations.
+- Interactive visualizations: Adjust group size and number of
+  simulations to see their impact on probabilities.
 
 #### How to Use
 
 1.  Launch the app:
 
-    ``` r
-    library(ProbabilityConceptVisualizer)
-    run_birthday_paradox_app()  # Launch the app
-    ```
+<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
 
-2.  Select an event type (Birthday Paradox, Dice Rolls, Card Draws, or
-    Coin Flips).
-
-3.  Adjust the number of samples (`n`) and simulate repeated outcomes.
-
-4.  View the probability of a repeated outcome occurring at least once.
-
-5.  Run multiple simulations and analyze the distribution of repeated
+2.  Select an event type (default is the **Birthday Paradox**).
+3.  Adjust parameters like group size (`n`) or number of iterations for
+    simulations.
+4.  Visualize the probability of a repeated outcome (e.g., shared
+    birthday or repeated dice roll).
+5.  Run multiple simulations to analyze the distribution of repeated
     outcomes.
 
 #### User Interface
 
 - **Input Parameters**:
-  - Event type: Choose from “Birthday Paradox”, “Dice Rolls”, “Card
-    Draws”, or “Coin Flips”.
-  - Number of samples (`n`): Set the number of samples for the selected
-    event.
-  - Number of repeated runs: Set how many times to repeat the simulation
-    for analysis.
+  - Event type: Start with “Birthday Paradox” or explore “Dice Rolls”,
+    “Card Draws”, and “Coin Flips” for comparison.
+  - Group size (`n`): Set the number of people (or samples) to observe
+    repeated outcomes.
+  - Number of repeated runs: Specify the number of simulations to
+    analyze repeated events.
 - **Visualizations**:
-  - **Probability Curve**: Line graph showing the probability of
-    repeated outcomes as the number of samples increases.
-  - **Simulation Plot**: Histogram displaying the frequency of repeated
-    outcomes across multiple simulation runs.
-  - **Probability Meter**: Displays the current probability of a
-    repeated outcome occurring in the selected event.
+  - **Probability Curve**: A line graph showing how the likelihood of
+    repeated outcomes changes as group size increases.
+  - **Simulation Plot**: A histogram displaying the frequency of
+    repeated outcomes across multiple simulation runs.
+  - **Probability Meter**: A visual gauge showing the probability of
+    observing a repeated outcome for the selected parameters.
 
 #### Example Visualizations
 
-**Probability Curve**:  
-*Visual representation of how the probability of a repeated outcome
-increases with the number of samples.*
+**Birthday Paradox Probability Curve**:  
+*Illustrates how the probability of shared birthdays increases sharply
+with group size.*
 
 <figure>
-<img src="man/figures/birthday_curve.png" alt="Probability Curve" />
-<figcaption aria-hidden="true">Probability Curve</figcaption>
+<img src="man/figures/birthday_curve.png"
+alt="Birthday Paradox Curve" />
+<figcaption aria-hidden="true">Birthday Paradox Curve</figcaption>
 </figure>
 
-**Simulation Plot**:  
-*Histogram showing the frequency of repeated outcomes across multiple
-simulation runs.*
+**Simulation Histogram**:  
+*Shows the frequency of repeated birthdays (or other outcomes) across
+multiple simulation runs.*
 
 <figure>
-<img src="man/figures/birthday_simulation.png" alt="Simulation Plot" />
-<figcaption aria-hidden="true">Simulation Plot</figcaption>
+<img src="man/figures/birthday_simulation.png"
+alt="Simulation Histogram" />
+<figcaption aria-hidden="true">Simulation Histogram</figcaption>
 </figure>
 
 #### Mathematical Formulas
@@ -582,6 +582,8 @@ equation:
 - **Dynamic Visualizations**: As the user adjusts parameters, the app
   updates the visualizations and equations to reflect the changes in
   real-time.
+
+------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 

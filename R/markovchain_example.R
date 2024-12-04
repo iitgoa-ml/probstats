@@ -1,16 +1,18 @@
-#' Markov Chain Weather State Visualizer
+#' Learn Markov Chains: State Transition Visualizer
 #'
-#' This Shiny app simulates weather transitions using a Markov Chain model.
-#' Users can configure a transition matrix, set initial probabilities,
-#' and observe the evolution of state probabilities over time.
-#' Visualizations include state transition diagrams, probability plots,
-#' and pie charts for initial and final state distributions.
+#' This Shiny app provides an interactive way to explore and understand Markov Chains
+#' using a relatable example of weather states (Sunny, Cloudy, Rainy).
+#' Users can configure the transition matrix, set initial probabilities,
+#' and observe how the probabilities of states evolve over time.
+#'
+#' The app helps users grasp core Markov Chain concepts such as state transitions,
+#' steady-state behavior, and the impact of initial conditions on long-term dynamics.
 #'
 #' Key features:
-#' - Validate transition matrix and initial probabilities.
-#' - Visualize probability evolution over time.
+#' - Validate the transition matrix and initial probabilities.
+#' - Visualize the evolution of state probabilities over time.
 #' - Analyze steady-state probabilities using eigenvalues or linear equations.
-#' - Dynamic representations of state transitions and probabilities.
+#' - Dynamic visualizations of state transitions, probability plots, and distributions.
 #'
 #' @import shiny
 #' @import ggplot2
@@ -20,7 +22,7 @@
 #' @import DT
 #' @examples
 #' \dontrun{
-#' run_markov_chain_visualizer() # Launches the Markov Chain visualizer Shiny app.
+#' run_markov_chain_visualizer() # Launches the Markov Chain Visualizer Shiny app.
 #' }
 #'
 #' @export
@@ -34,7 +36,7 @@ run_markov_chain_visualizer <- function(){
 
   # Define UI
   ui <- fluidPage(
-    titlePanel("Enhanced Weather Simulation with Markov Chains"),
+    titlePanel("Markov Chains: State Transition Visualizer"),
 
     sidebarLayout(
       sidebarPanel(
@@ -195,7 +197,9 @@ run_markov_chain_visualizer <- function(){
       }
     })
     # Steady-State Analysis Using Linear Equations
+    # Steady-State Analysis Combining Linear Equations and Eigenvalue Method
     output$steady_state <- renderText({
+      req(probs())
       req(input$transition_matrix)
 
       # Extract the transition matrix from input
@@ -208,20 +212,57 @@ run_markov_chain_visualizer <- function(){
 
       num_states <- nrow(transition_matrix)
 
-      # Construct the linear system for steady-state
-      A <- t(transition_matrix) - diag(num_states)  # Subtract identity matrix
-      A[num_states, ] <- 1                          # Add the normalization equation: sum(pi) = 1
-      b <- c(rep(0, num_states - 1), 1)             # Right-hand side vector
+      ### Method 1: Linear Equations
+      try_linear_method <- function() {
+        # Construct the linear system for steady-state
+        A <- t(transition_matrix) - diag(num_states)  # Subtract identity matrix
+        A[num_states, ] <- 1                          # Add the normalization equation: sum(pi) = 1
+        b <- c(rep(0, num_states - 1), 1)             # Right-hand side vector
 
-      # Solve the linear system
-      steady_state_probs <- tryCatch({
-        solve(A, b)
-      }, error = function(e) {
-        return(NULL)  # Handle non-invertible matrices gracefully
-      })
+        # Solve the linear system
+        steady_state_probs <- tryCatch({
+          solve(A, b)
+        }, error = function(e) {
+          return(NULL)  # Return NULL if the system is unsolvable
+        })
 
-      # Check if solution exists and is valid
-      if (is.null(steady_state_probs) || any(steady_state_probs < 0) || abs(sum(steady_state_probs) - 1) > 1e-6) {
+        # Validate the solution
+        if (!is.null(steady_state_probs) &&
+            all(steady_state_probs >= 0) &&
+            abs(sum(steady_state_probs) - 1) < 1e-6) {
+          return(steady_state_probs)
+        }
+        return(NULL)  # Return NULL if the solution is invalid
+      }
+
+      ### Method 2: Eigenvalue Method
+      try_eigen_method <- function() {
+        # Calculate the eigenvalues and eigenvectors
+        eig <- eigen(t(transition_matrix))
+        eig_values <- eig$values
+        eig_vectors <- eig$vectors
+
+        # Find the eigenvector corresponding to the eigenvalue 1
+        steady_state_vector <- eig_vectors[, which(abs(eig_values - 1) < 1e-6)]
+
+        # Normalize the eigenvector to form a probability distribution
+        steady_state_probs <- steady_state_vector / sum(steady_state_vector)
+
+        # Validate the solution
+        if (all(steady_state_probs >= 0) && abs(sum(steady_state_probs) - 1) < 1e-6) {
+          return(steady_state_probs)
+        }
+        return(NULL)  # Return NULL if the solution is invalid
+      }
+
+      ### Main Execution
+      steady_state_probs <- try_linear_method()
+      if (is.null(steady_state_probs)) {
+        steady_state_probs <- try_eigen_method()
+      }
+
+      # Check if any method succeeded
+      if (is.null(steady_state_probs)) {
         return("Steady-state probabilities could not be computed. Ensure the matrix is valid.")
       }
 
@@ -231,6 +272,7 @@ run_markov_chain_visualizer <- function(){
              ", Cloudy = ", round(steady_state_probs[2], 3),
              ", Rainy = ", round(steady_state_probs[3], 3))
     })
+
 
     # Detailed Conclusion
     output$conclusion <- renderText({
@@ -272,6 +314,9 @@ run_markov_chain_visualizer <- function(){
       # Define edge color and size
       edge_colors <- "#555555"
       edge_widths <- E(graph)$weight * 5  # Scaled edge width based on probability
+
+      # Prob Labels
+      edge_labels <- paste0("P=", edge_weights)  # Format edge labels with probabilities
 
       # Plot the graph with enhanced features
       plot(graph,
