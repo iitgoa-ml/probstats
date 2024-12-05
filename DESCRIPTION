@@ -22,5 +22,6 @@ Imports:
     shinyMatrix,
     zoo,
     reshape2,
-    latex2exp
+    latex2exp,
+    shinyBS
     

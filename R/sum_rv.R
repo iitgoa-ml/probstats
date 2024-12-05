@@ -95,7 +95,7 @@ run_rv_sum_app <- function() {
       .well { background-color: #f5f5f5; }
     "))),
 
-    titlePanel("Sum of Random Variables: Advanced Educational Visualization"),
+    titlePanel("Sum of Random Variables Visualization"),
 
     div(class = "explanation",
         h3("Learning Objectives"),
@@ -345,51 +345,52 @@ run_rv_sum_app <- function() {
       ))
     })
 
-    # Theoretical Background
     output$theoretical_background <- renderUI({
       HTML(
-        "<h3>Theoretical Foundations of Sum of Random Variables</h3>" %+%
-          "<h4>1. Basic Principles</h4>" %+%
-          "<p>When independent random variables are added, their properties combine:</p>" %+%
-          "<ul>" %+%
-          "<li><strong>Mean:</strong> Sum of individual means</li>" %+%
-          "<li><strong>Variance:</strong> Sum of individual variances</li>" %+%
-          "</ul>" %+%
-
-          "<h4>2. Central Limit Theorem</h4>" %+%
-          "<p>As the number of random variables increases, their sum approaches a normal distribution.</p>" %+%
-
-          "<h4>3. Distribution-Specific Behavior</h4>" %+%
-          "<ul>" %+%
-          "<li>Normal distributions sum to a normal distribution</li>" %+%
-          "<li>Some distributions have specific sum properties</li>" %+%
-          "<li>Asymmetric distributions can create complex sum behaviors</li>" %+%
-          "</ul>"
+        "<h3>Theoretical Foundations of Sum of Random Variables</h3>
+         <h4>1. Basic Principles</h4>
+         <p>When independent random variables are added, their properties combine:</p>
+         <ul>
+           <li><strong>Mean:</strong> The mean of the sum is the sum of the means of the individual variables.</li>
+           <li><strong>Variance:</strong> The variance of the sum is the sum of the variances of the individual variables, provided they are independent.</li>
+         </ul>
+         <h4>2. Central Limit Theorem</h4>
+         <p>The Central Limit Theorem (CLT) explains that:</p>
+         <ul>
+           <li>For a sufficiently large number of independent and identically distributed (i.i.d.) random variables, their sum (or average) tends to follow a normal distribution.</li>
+           <li>This holds true regardless of the original distribution of the variables, provided they have finite mean and variance.</li>
+           <li>The approximation improves as the number of variables increases.</li>
+         </ul>
+         <h4>3. Distribution-Specific Behavior</h4>
+         <p>While the CLT governs general behavior, specific distributions have unique properties when summed:</p>
+         <ul>
+           <li><strong>Normal distributions:</strong> The sum of normal random variables is also normal.</li>
+           <li><strong>Exponential distributions:</strong> Their sums lead to a gamma distribution.</li>
+           <li><strong>Non-identically distributed variables:</strong> Summing variables with different distributions may not follow the CLT unless other conditions are met.</li>
+         </ul>"
       )
     })
 
-    # Conclusion and Insights
+
     output$conclusion_insights <- renderUI({
       req(simulation_data())
-
       HTML(
-        "<h3>Conclusions and Insights</h3>" %+%
-          "<p>Key takeaways from distribution sum analysis:</p>" %+%
-          "<ul>" %+%
-          "<li>Distribution sums are fundamental to understanding probabilistic systems</li>" %+%
-          "<li>Theoretical predictions may differ from empirical observations</li>" %+%
-          "<li>Simulation helps visualize complex probabilistic interactions</li>" %+%
-          "<li>Different distributions produce unique sum characteristics</li>" %+%
-          "</ul>" %+%
-
-          "<h4>Practical Implications</h4>" %+%
-          "<p>Understanding distribution sums is crucial in:</p>" %+%
-          "<ul>" %+%
-          "<li>Statistical modeling</li>" %+%
-          "<li>Financial risk assessment</li>" %+%
-          "<li>Scientific research</li>" %+%
-          "<li>Machine learning and data science</li>" %+%
-          "</ul>"
+        "<h3>Conclusions and Insights</h3>
+         <p>Key takeaways from distribution sum analysis:</p>
+         <ul>
+           <li>Distribution sums are fundamental to understanding probabilistic systems</li>
+           <li>Theoretical predictions may differ from empirical observations</li>
+           <li>Simulation helps visualize complex probabilistic interactions</li>
+           <li>Different distributions produce unique sum characteristics</li>
+         </ul>
+         <h4>Practical Implications</h4>
+         <p>Understanding distribution sums is crucial in:</p>
+         <ul>
+           <li>Statistical modeling</li>
+           <li>Financial risk assessment</li>
+           <li>Scientific research</li>
+           <li>Machine learning and data science</li>
+         </ul>"
       )
     })
 

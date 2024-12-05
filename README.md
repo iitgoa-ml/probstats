@@ -76,12 +76,13 @@ devtools::install_github("iitgoa-ml/probstats")
 The package requires the following R packages, which will be
 automatically installed if not already available: - `DT` - `dplyr` -
 `ggplot2` - `gridExtra` - `palmerpenguins` - `plotly` - `readxl` -
-`shiny` - `zoo` - `igraph` - `shinyMatrix`
+`shiny` - `zoo` - `igraph` - `shinyMatrix` - `reshape2` - `latex2exp` -
+`shinyBS`
 
 If necessary, you can install these dependencies manually:
 
 ``` r
-install.packages(c("DT", "dplyr", "ggplot2", "gridExtra", "palmerpenguins", "plotly", "readxl", "shiny", "zoo", "igraph", "shinyMatrix"))
+install.packages(c("DT", "dplyr", "ggplot2", "gridExtra", "palmerpenguins", "plotly", "readxl", "shiny", "zoo", "igraph", "shinyMatrix", "reshape2","latex2exp","shinyBS"))
 ```
 
 ------------------------------------------------------------------------
@@ -104,6 +105,9 @@ To run a specific Shiny app, use one of the following functions:
 - [`run_distribution_visualizer_app()`](#probability-distributions-visualizer)
 - [`run_probability_tree_app()`](#probability-tree-visualization-app)
 - [`run_markov_chain_visualizer()`](#markov-chain-weather-state-visualizer)
+- [`run_coupon_collector_app()`](#coupon-collector-problem-visualizer)
+- [`run_poisson_app()`](#poisson-and-exponential-distributions-app)
+- [`run_rv_sum_app`](#sum-of-random-variables-visualizer)
 
 **Note:** An active internet connection is required to display equations
 correctly, as the package uses MathJax for rendering LaTeX in the
@@ -745,9 +749,9 @@ calculate probabilities, and visualize results dynamically.
 
 ------------------------------------------------------------------------
 
-### Inputs and Outputs for Each Distribution
+##### Inputs and Outputs for Each Distribution
 
-#### 1. **Uniform Distribution**
+##### 1. **Uniform Distribution**
 
 - **Inputs**:
   - **Min**: Minimum value of the uniform distribution.
@@ -772,7 +776,7 @@ calculate probabilities, and visualize results dynamically.
 intervals.*  
 ![Uniform Distribution](man/figures/distribution_uniform.png)
 
-#### 2. **Normal Distribution**
+##### 2. **Normal Distribution**
 
 - **Inputs**:
   - **Mean ($\mu$)**: The mean (center) of the normal distribution.
@@ -796,7 +800,7 @@ intervals.*
 *Normal distribution density curve and CDF with highlighted regions.*
 ![Normal Distribution](man/figures/distribution_normal.png)
 
-#### 3. **Exponential Distribution**
+##### 3. **Exponential Distribution**
 
 - **Inputs**:
   - **Rate ($\lambda$)**: The rate parameter of the exponential
@@ -819,7 +823,7 @@ intervals.*
 highlighted intervals.* ![Exponential
 Distribution](man/figures/distribution_exponential.png)
 
-#### 4. **Binomial Distribution**
+##### 4. **Binomial Distribution**
 
 - **Inputs**:
   - **Number of Trials (n)**: The number of independent trials (e.g.,
@@ -845,7 +849,7 @@ Distribution](man/figures/distribution_exponential.png)
 with simulation results.*  
 ![Binomial Distribution](man/figures/distribution_binomial.png)
 
-#### 5. **Geometric Distribution**
+##### 5. **Geometric Distribution**
 
 - **Inputs**:
   - **Probability of Success (p)**: The probability of success on each
@@ -910,6 +914,272 @@ For example:
 This app provides a comprehensive exploration of distributions,
 empowering users to understand and visualize probabilities
 interactively.
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+### Coupon Collector Problem Visualizer
+
+This Shiny app provides interactive visualizations and simulations for
+the Coupon Collector Problem, enabling users to explore theoretical
+expectations, run Monte Carlo simulations, and analyze distributions
+like PMF (Probability Mass Function) and CDF (Cumulative Distribution
+Function).
+
+#### Key Features
+
+- Simulate the Coupon Collector Problem with customizable parameters.
+- Visualize theoretical expected trials, simulation results, PMF, and
+  CDF.
+- Choose from dynamic plot themes: Light, Minimal, and Dark.
+- Understand the problem with detailed explanations and key formulae.
+
+#### How to Use
+
+1.  Launch the app:
+    ```` ```{=html} <div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div> ``` ````
+2.  Customize the simulation:
+    - **Number of Coupons (n):** Set the number of unique items to
+      collect.
+    - **Number of Simulations:** Choose the number of Monte Carlo trials
+      to run.
+    - **Plot Theme:** Select a theme for the visualizations.
+3.  Click “Run Simulations” to start the simulation.
+4.  Explore the results in the following tabs:
+    - **Expected Trials:** View the theoretical number of trials
+      required to collect all coupons.
+    - **Simulation Results:** Analyze a histogram of simulation outcomes
+      and view a detailed summary.
+    - **Probability Distribution (PMF):** Observe the probability of
+      requiring specific numbers of draws.
+    - **Cumulative Distribution Function (CDF):** Examine the cumulative
+      probability of collecting all coupons within a given number of
+      draws.
+
+#### User Interface
+
+- **Input Parameters**:
+  - Number of Coupons ($n$): Set the number of unique coupons.
+  - Number of Simulations: Specify the number of Monte Carlo trials.
+  - Plot Theme: Select between Light, Minimal, and Dark themes for the
+    plots.
+- **Tabs and Visualizations**:
+  - **Expected Trials Plot**: Line plot showing the theoretical
+    relationship between coupon count and expected trials.
+  - **Simulation Histogram**: Bar chart of trial outcomes from Monte
+    Carlo simulations.
+  - **PMF Plot**: Bar chart displaying the probability mass function.
+  - **CDF Plot**: Line chart illustrating the cumulative probability
+    distribution.
+
+#### Example Visualizations
+
+**Expected Trials Plot**:  
+*Theoretical relationship between the number of coupons and expected
+trials.*
+
+<!-- ![Expected Trials Plot](man/figures/expected_trials.png)   -->
+
+*(Placeholder for image: Replace with a plot showing
+$E(T) = n \times H_n$.)*
+
+**Simulation Histogram**:  
+*Histogram of the number of trials required across simulations.*
+
+<!-- ![Simulation Histogram](man/figures/simulation_histogram.png)   -->
+
+**PMF and CDF Plots**:  
+*Probability Mass Function and Cumulative Distribution Function derived
+from simulations.*
+
+<!-- ![PMF Plot](man/figures/pmf_plot.png)   -->
+<!-- ![CDF Plot](man/figures/cdf_plot.png)   -->
+
+#### Additional Analysis
+
+- **Theoretical Expectations**: Understand the harmonic number formula
+  $E(T) = n \times H_n$.
+- **Simulation Insights**:
+  - Compare empirical results with theoretical expectations.
+  - Observe variability in outcomes with different simulation sizes.
+- **Interactive Adjustments**:
+  - Dynamically modify inputs and observe their effects on
+    visualizations.
+  - Learn through hands-on experimentation and detailed plot
+    annotations.
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+### Sum of Random Variables Visualizer
+
+This Shiny app provides an interactive and educational platform to
+explore the behavior of sums of random variables. It supports a wide
+range of probability distributions, enabling users to analyze their
+properties, simulate sums, and understand theoretical and empirical
+insights into probabilistic concepts.
+
+#### Key Features
+
+- Choose from various distributions: Normal, Exponential, Gamma, Beta,
+  Chi-Square, and Poisson.
+- Customize up to 10 random variables with adjustable parameters.
+- Real-time visualizations for individual distributions and their sum.
+- Analyze theoretical properties and compare them with simulation
+  results.
+- Statistical summary with normality tests, Q-Q plots, and
+  visualizations.
+- Educational explanation of the Central Limit Theorem and other key
+  concepts.
+
+#### How to Use
+
+1.  Launch the app:
+    ```` ```{=html} <div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div> ``` ````
+2.  Customize the parameters:
+    - **Number of Distributions:** Select up to 10 random variables to
+      sum.
+    - **Distribution Type:** Choose from Normal, Exponential, Gamma,
+      Beta, Chi-Square, or Poisson.
+    - **Parameter Settings:** Define distribution-specific parameters
+      (e.g., mean, standard deviation, rate).
+    - **Sample Size:** Set the number of samples to simulate (e.g.,
+      10,000).
+3.  Click “Simulate Distributions” to generate results.
+4.  Explore the results in the following tabs:
+    - **Distributions:** Visualize individual distributions and their
+      sum.
+    - **Statistical Analysis:** View Q-Q plots, normality test results,
+      and distribution summaries.
+    - **Theoretical Background:** Learn about key concepts and
+      mathematical principles.
+    - **Conclusion and Insights:** Reflect on observed trends and
+      practical applications.
+
+#### User Interface
+
+- **Input Parameters**:
+  - Number of Distributions: Select up to 10 random variables.
+  - Distribution Types and Parameters: Dynamically set based on the
+    chosen distribution.
+  - Sample Size: Specify the number of samples for simulation.
+- **Tabs and Visualizations**:
+  - **Distributions Plot**: Individual histograms and sum distribution
+    visualization.
+  - **Statistical Analysis**: Q-Q plots and statistical tests.
+  - **Theoretical Background**: Educational content on probabilistic
+    concepts.
+  - **Conclusions and Insights**: Summarized findings and practical
+    implications.
+
+#### Supported Distributions and Parameters
+
+- **Normal**: Defined by Mean and Standard Deviation.
+- **Exponential**: Defined by the Rate parameter.
+- **Gamma**: Defined by Shape and Rate parameters.
+- **Beta**: Defined by Shape 1 and Shape 2 parameters.
+- **Chi-Square**: Defined by Degrees of Freedom.
+- **Poisson**: Defined by Lambda (event rate).
+
+#### Example Visualizations
+
+**Distributions Plot**:  
+*Histograms and density curves for individual distributions and their
+sum.*
+
+<!-- ![Distributions Plot](man/figures/distributions_plot.png)   -->
+
+*(Placeholder: Replace with plot illustrating individual and summed
+distributions.)*
+
+**Q-Q Plot**:  
+*Analysis of normality for the summed distribution.*
+
+<!-- ![Q-Q Plot](man/figures/qq_plot.png)   -->
+
+**Summary Table**:  
+*Statistical summary of individual and summed distributions.*
+
+| Distribution         | Mean    | Variance |
+|----------------------|---------|----------|
+| Normal               | 0.0     | 1.0      |
+| Poisson              | 5.0     | 5.0      |
+| **Sum Distribution** | **5.0** | **6.0**  |
+
+#### Educational Highlights
+
+- **Central Limit Theorem**: Observe how sums of random variables trend
+  towards a normal distribution.
+- **Mean and Variance**: Understand how these parameters aggregate when
+  summing random variables.
+- **Interplay of Distributions**: Explore how diverse distributions
+  combine to produce unique outcomes.
+
+#### Additional Analysis
+
+- **Theoretical Insights**: View expected mean and variance derived from
+  individual distributions.
+- **Simulation Observations**:
+  - Empirical results highlight variability and randomness.
+  - Interactive Q-Q plots help assess deviations from normality.
+- **Practical Applications**:
+  - Useful in finance, machine learning, and risk modeling.
+  - Illustrates foundational probabilistic and statistical principles.
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+### Poisson and Exponential Distributions App
+
+This Shiny app allows users to explore the properties of Poisson and
+Exponential distributions interactively.
+
+#### Key Features
+
+- **Poisson Distribution**: Visualizes the probability of a number of
+  events (x) based on the rate parameter (λ).
+- **Exponential Distribution**: Models the waiting time between events
+  using λ as the rate.
+- Interactive sliders for adjusting parameters and viewing real-time
+  updates on plots and summaries.
+
+#### How to Use
+
+1.  Launch the app:
+    ```` ```{=html} <div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div> ``` ````
+2.  Adjust the **Rate Parameter (λ)** using the slider.
+3.  For the Poisson distribution:
+    - Adjust the X-Range to explore the probabilities for a specific
+      number of events.
+    - View the probability distribution plot and summary.
+4.  For the Exponential distribution:
+    - Adjust the Time Range to explore waiting time densities.
+    - View the density plot with key metrics like the mean waiting time.
+
+#### User Interface
+
+- **Sidebar**:
+  - **Rate Parameter (λ)**: Controls the distribution characteristics.
+  - **X-Range for Poisson**: Selects the number of events range for
+    Poisson distribution.
+  - **Time Range for Exponential**: Selects the time range for the
+    Exponential distribution.
+- **Main Panel**:
+  - **Poisson Distribution Plot and Summary**: Visual representation of
+    event probabilities and statistical metrics.
+  - **Exponential Distribution Plot and Summary**: Density plot showing
+    the waiting time between events and mean waiting time.
+
+#### Example Visualizations
+
+**Poisson Distribution Plot**:  
+*Probability distribution for event occurrences with varying λ.*
+
+**Exponential Distribution Plot**:  
+*Waiting time density with marked mean waiting time.*
 
 ------------------------------------------------------------------------
 
