@@ -732,19 +732,19 @@ This Shiny app provides interactive visualizations and simulations for the Coupo
 **Expected Trials Plot**:  
 _Theoretical relationship between the number of coupons and expected trials._  
 
-<!-- ![Expected Trials Plot](man/figures/expected_trials.png)   -->
+![Expected Trials Plot](man/figures/cc_expected_trials.png)  
 *(Placeholder for image: Replace with a plot showing \( E(T) = n \times H_n \).)*
 
 **Simulation Histogram**:  
 _Histogram of the number of trials required across simulations._  
 
-<!-- ![Simulation Histogram](man/figures/simulation_histogram.png)   -->
+![Simulation Histogram](man/figures/cc_simulation_histogram.png)  
 
 **PMF and CDF Plots**:  
 _Probability Mass Function and Cumulative Distribution Function derived from simulations._  
 
-<!-- ![PMF Plot](man/figures/pmf_plot.png)   -->
-<!-- ![CDF Plot](man/figures/cdf_plot.png)   -->
+![PMF Plot](man/figures/cc_pmf_plot.png)  
+![CDF Plot](man/figures/cc_cdf_plot.png)  
 
 #### Additional Analysis
 - **Theoretical Expectations**: Understand the harmonic number formula \( E(T) = n \times H_n \).
@@ -814,13 +814,13 @@ This Shiny app provides an interactive and educational platform to explore the b
 **Distributions Plot**:  
 _Histograms and density curves for individual distributions and their sum._  
 
-<!-- ![Distributions Plot](man/figures/distributions_plot.png)   -->
+![Distributions Plot](man/figures/rvsum_distributions_plot.png)  
 *(Placeholder: Replace with plot illustrating individual and summed distributions.)*
 
 **Q-Q Plot**:  
 _Analysis of normality for the summed distribution._  
 
-<!-- ![Q-Q Plot](man/figures/qq_plot.png)   -->
+![Q-Q Plot](man/figures/rvsum_qq_plot.png)  
 
 **Summary Table**:  
 _Statistical summary of individual and summed distributions._  
@@ -887,9 +887,11 @@ This Shiny app allows users to explore the properties of Poisson and Exponential
 
 **Poisson Distribution Plot**:  
 _Probability distribution for event occurrences with varying λ._
+![Poisson Distribution](man/figures/poisson_pmf.png)  
 
 **Exponential Distribution Plot**:  
 _Waiting time density with marked mean waiting time._
+![Waiting Time Distribution](man/figures/poisson_wt.png)
 
 ---
 

@@ -119,7 +119,7 @@ run_rv_sum_app <- function() {
 
         numericInput("num_samples",
                      "Number of Samples",
-                     value = 10000,
+                     value = 5000,
                      min = 1000,
                      max = 100000),
 

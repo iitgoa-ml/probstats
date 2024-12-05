@@ -979,22 +979,25 @@ Function).
 *Theoretical relationship between the number of coupons and expected
 trials.*
 
-<!-- ![Expected Trials Plot](man/figures/expected_trials.png)   -->
-
+![Expected Trials Plot](man/figures/cc_expected_trials.png)  
 *(Placeholder for image: Replace with a plot showing
 $E(T) = n \times H_n$.)*
 
 **Simulation Histogram**:  
 *Histogram of the number of trials required across simulations.*
 
-<!-- ![Simulation Histogram](man/figures/simulation_histogram.png)   -->
+<figure>
+<img src="man/figures/cc_simulation_histogram.png"
+alt="Simulation Histogram" />
+<figcaption aria-hidden="true">Simulation Histogram</figcaption>
+</figure>
 
 **PMF and CDF Plots**:  
 *Probability Mass Function and Cumulative Distribution Function derived
 from simulations.*
 
-<!-- ![PMF Plot](man/figures/pmf_plot.png)   -->
-<!-- ![CDF Plot](man/figures/cdf_plot.png)   -->
+![PMF Plot](man/figures/cc_pmf_plot.png)  
+![CDF Plot](man/figures/cc_cdf_plot.png)
 
 #### Additional Analysis
 
@@ -1089,15 +1092,17 @@ insights into probabilistic concepts.
 *Histograms and density curves for individual distributions and their
 sum.*
 
-<!-- ![Distributions Plot](man/figures/distributions_plot.png)   -->
-
+![Distributions Plot](man/figures/rvsum_distributions_plot.png)  
 *(Placeholder: Replace with plot illustrating individual and summed
 distributions.)*
 
 **Q-Q Plot**:  
 *Analysis of normality for the summed distribution.*
 
-<!-- ![Q-Q Plot](man/figures/qq_plot.png)   -->
+<figure>
+<img src="man/figures/rvsum_qq_plot.png" alt="Q-Q Plot" />
+<figcaption aria-hidden="true">Q-Q Plot</figcaption>
+</figure>
 
 **Summary Table**:  
 *Statistical summary of individual and summed distributions.*
@@ -1177,9 +1182,11 @@ Exponential distributions interactively.
 
 **Poisson Distribution Plot**:  
 *Probability distribution for event occurrences with varying λ.*
+![Poisson Distribution](man/figures/poisson_pmf.png)
 
 **Exponential Distribution Plot**:  
-*Waiting time density with marked mean waiting time.*
+*Waiting time density with marked mean waiting time.* ![Waiting Time
+Distribution](man/figures/poisson_wt.png)
 
 ------------------------------------------------------------------------
 
